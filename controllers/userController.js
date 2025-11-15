@@ -17,7 +17,6 @@ exports.seedUsers = async (req, res) => {
   res.send('✅ Sample users added!');
 };
 
-//const User = require('../models/User'); // adjust path if needed
 
 // Handle registration form submission
 exports.registerUser = async (req, res) => {
@@ -43,4 +42,28 @@ exports.registerUser = async (req, res) => {
         res.status(500).send("Server error");
     }
 };
+
+exports.loginUser = async (req, res) => {
+  try {
+      const { email, password } = req.body;
+
+      // Check if user exists
+      const user = await User.findOne({ email });
+      if (!user) {
+          return res.status(400).send("Invalid email or password");
+      }
+
+      // Compare hashed password
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+          return res.status(400).send("Invalid email or password");
+      }
+
+      res.send("Login successful!");
+  } catch (err) {
+      console.error(err);
+      res.status(500).send("Server error");
+  }
+};
+
 
