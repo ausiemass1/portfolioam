@@ -1,62 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title || austin %></title>
-  
-  
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+
+
+    <!-- Google Material Icons -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
     <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+<link rel="stylesheet" href="/public/css/styles.css">
+     <style>
+      /* Base layout */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+      }
 
+      /* Let main fill remaining space */
+      main {
+        flex: 1 0 auto;
+      }
 
-<style>
-    /* Base layout */
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Let main fill remaining space */
-  main {
-    flex: 1 0 auto;
-  }
-  
-  /* Keep footer at the bottom */
-  footer.page-footer {
-    margin-top: auto;
-    width: 100%;
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
-  
-  /* Optional: fix Materialize container margin */
-  footer .container {
-    margin-bottom: 0;
-  }
+      /* Keep footer at the bottom */
+      footer.page-footer {
+        margin-top: auto;
+        width: 100%;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
 
-</style>
-   
+      /* Optional: fix Materialize container margin */
+      footer .container {
+        margin-bottom: 0;
+      }
+    </style> 
   </head>
-<body>
+  <body>
+    <!-- Navbar -->
+    <%- include('partials/header.ejs') %>
+    <!-- Page Content -->
+    <main class="section no-margin"><%- body %></main>
 
-  <!-- Navbar -->
-  <%- include('partials/header.ejs')  %>
-  <!-- Page Content -->
-  <main class="container section">
-    <%- body %>
-  </main>
+    <!-- footer -->
+    <%- include('partials/footer.ejs') %>
+    <!-- jQuery (must come first) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
- 
-  <!-- footer -->
-  <%-  include('partials/footer.ejs')  %>
-
-   <!-- Compiled and minified JavaScript -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-</body>
+    <!-- Init script -->
+    <script src="/js/script.js"></script>
+  </body>
 </html>

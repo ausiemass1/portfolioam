@@ -1,8 +1,37 @@
 <header>
- 
-    <nav>
-      <div class="nav-wrapper">
-        <a href="#!" class="brand-logo">Logo</a>
+  <ul id="dropdown1" class="dropdown-content">
+    <li><a href="#!">Mathematical reasoning</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">Statistics</a></li>
+    <li class="divider"></li>
+
+  </ul>
+
+  <ul id="dropdown2" class="dropdown-content">
+    <li><a href="#!">Algebra</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">Calculus</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">Probability & Statistics</a></li>
+  </ul>
+
+
+  <ul id="dropdown3" class="dropdown-content">
+    <li><a href="#!">Integration</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">Differentiation</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">Complex Numbers</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">Probability</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">Normal distribution</a></li>
+  </ul>
+
+  <div class="navbar-fixed">
+    <nav class="nav-logo">
+      <div class="nav-wrapper blue darken-3 ">
+        <a href="#!" class="brand-logo"> <img src="/images/austin-logo1.png" alt="Logo" style="height: 56px;"> </a>
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         <ul class="right hide-on-med-and-down">
           <li><a href="/">Home</a></li>
@@ -11,9 +40,14 @@
           <li><a href="/projects">Projects</a></li>
           <li><a href="/logout">logout</a></li>
           <li><a href="/register">Register</a></li>
+          <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Level 1<i class="material-icons right">arrow_drop_down</i></a></li>
+          <li><a class="dropdown-trigger" href="#!" data-target="dropdown2">Level 2<i class="material-icons right">arrow_drop_down</i></a></li>
+          <li><a class="dropdown-trigger" href="#!" data-target="dropdown3">Level 3<i class="material-icons right">arrow_drop_down</i></a></li>
         </ul>
       </div>
     </nav>
+
+    </div>
   
     <ul class="sidenav" id="mobile-demo">
       <li><a href="/">Home</a></li>

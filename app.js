@@ -2,8 +2,16 @@
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const path = require("path");
-
 const app = express();
+require('dotenv').config();
+
+const mongoose = require('mongoose');
+
+
+// MongoDB connection
+mongoose.connect(process.env.DATABASE)
+  .then(() => console.log('✅ Connected to MongoDB'))
+  .catch(err => console.error('❌ MongoDB connection error:', err));
 
 // --------------------
 // VIEW ENGINE SETUP
@@ -20,42 +28,22 @@ app.set("layout", "./layout"); // This tells Express to use views/layout.ejs as 
 // --------------------
 // Parse form data (optional)
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Serve static files (CSS, JS, images) from /public
 app.use(express.static(path.join(__dirname, "public")));
+
 
 // --------------------
 // ROUTES
 // --------------------
 
-// Home page
-app.get("/", (req, res) => {
-  res.render("pages/index", { title: "Home Page" });
-});
+const userRoutes = require('./routes/users');
+const indexRoutes = require('./routes/home');
 
-// About page
-app.get("/about", (req, res) => {
-  res.render("pages/about", { title: "About Us" });
-});
+app.use('/users', userRoutes);
+app.use('/', indexRoutes);
 
-// projects page
-app.get("/projects", (req, res) => {
-  res.render("pages/projects", { title: "Projects" });
-});
-// login page
-app.get("/login", (req, res) => {
-  res.render("pages/login", { title: "login" });
-});
-
-// logout page
-app.get("/logout", (req, res) => {
-  res.render("pages/logout", { title: "logout" });
-});
-
-// register page
-app.get("/register", (req, res) => {
-  res.render("pages/register", { title: "register" });
-});
 // --------------------
 // START SERVER
 // --------------------
