@@ -3,6 +3,7 @@ const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const path = require("path");
 const app = express();
+
 require('dotenv').config();
 
 const mongoose = require('mongoose');
