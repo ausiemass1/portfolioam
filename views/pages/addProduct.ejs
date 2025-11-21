@@ -1,0 +1,32 @@
+<div class="container">
+  <h1>Add a New Product</h1>
+
+  <form action="/products/add" method="POST" enctype="multipart/form-data">
+    <!-- Product Name -->
+    <div>
+      <label for="product_name">Product Name:</label>
+      <input type="text" id="product_name" name="product_name" required />
+    </div>
+
+    <!-- Price -->
+    <div>
+      <label for="price">Price:</label>
+      <input type="text" id="price" name="price" required />
+    </div> <br><br>
+
+    <!-- Image (upload or URL) -->
+    <div>
+      <label for="image">Product Image:</label>
+      <!-- <input
+        type="text"
+        id="image"
+        name="image"
+        placeholder="Enter image URL"
+      /> -->
+      
+       <input type="file" id="image" name="image">  <br>
+    </div>
+<br><br>
+    <button type="submit">Add Product</button>
+  </form>
+</div>

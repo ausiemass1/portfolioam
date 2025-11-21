@@ -20,11 +20,6 @@ router.get("/login", (req, res) => {
   res.render("pages/login", { title: "login" });
 });
 
-// logout page
-router.get("/logout", (req, res) => {
-  res.render("pages/logout", { title: "logout" });
-});
-
 // register page
 router.get("/register", (req, res) => {
   res.render("pages/register", { title: "register" });

@@ -10,6 +10,8 @@
             <th>Name</th>
             <th>Age</th>
             <th>Email</th>
+            <th>Edit</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -18,6 +20,20 @@
               <td><%= user.name %></td>
               <td><%= user.age %></td>
               <td><%= user.email %></td>
+             <td> <a href="/users/edit/<%= user._id %>" onclick="return confirm('Edit this user?')">
+                <span class="material-icons" style="color: rgb(30, 0, 255); cursor: pointer;">
+                  edit
+                </span>
+              </a>
+            </td>
+            <td>
+                  <a href="/users/delete/<%= user._id %>" onclick="return confirm('Delete this user?')">
+                    <span class="material-icons" style="color: red; cursor: pointer;">
+                      delete
+                    </span>
+                  </a>
+                </td>
+                 
             </tr>
           <% }) %>
         </tbody>

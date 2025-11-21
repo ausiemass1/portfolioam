@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt')
+const jwt = require("jsonwebtoken");
 
 // Display all users
 exports.getUsers = async (req, res) => {
@@ -16,7 +17,6 @@ exports.seedUsers = async (req, res) => {
   ]);
   res.send('✅ Sample users added!');
 };
-
 
 // Handle registration form submission
 exports.registerUser = async (req, res) => {
@@ -36,13 +36,15 @@ exports.registerUser = async (req, res) => {
 
         await newUser.save();
 
-        res.send("User registered successfully!");
+        //res.send("User registered successfully!");
+        res.redirect('../login');
     } catch (err) {
         console.error(err);
         res.status(500).send("Server error");
     }
 };
 
+// Handle login users
 exports.loginUser = async (req, res) => {
   try {
       const { email, password } = req.body;
@@ -59,11 +61,77 @@ exports.loginUser = async (req, res) => {
           return res.status(400).send("Invalid email or password");
       }
 
-      res.send("Login successful!");
+      // Create JWT token
+    const token = jwt.sign(
+      { id: user._id },   // payload
+      "MYSECRET",         // secret key
+      { expiresIn: "1d" } // token duration
+    );
+
+    // Store token in cookie
+    res.cookie("token", token, { httpOnly: true,
+      maxAge: 2 * 60 * 1000,  }); // automatic logout after 2 minutes
+
+      // res.send("Login successful!");
+      res.redirect('/users');
   } catch (err) {
       console.error(err);
       res.status(500).send("Server error");
   }
 };
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const userId = req.params.id;  // Get the user ID from the URL
+    await User.findByIdAndDelete(userId); // Delete the user from the DB
+
+    res.redirect('/users'); // After deleting, go back to the user list page
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error deleting user');
+  }
+};
+
+// Show the edit form
+exports.editUserForm = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    res.render('pages/update', { title: "Edit User", user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error loading edit form");
+  }
+};
+
+//Update the form
+exports.updateUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    await User.findByIdAndUpdate(id, {
+      name: req.body.name,
+      age: req.body.age,
+      email: req.body.email,
+      password: req.body.password
+    });
+
+    res.redirect('/users');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Update failed");
+  }
+};
+
+//logout
+exports.logoutUser = (req, res) => {
+  // Clear the token cookie
+  res.clearCookie("token");
+
+  // Optionally you can add a message or redirect
+  res.redirect("/login");  // send user back to login page
+};
+
+
+
 
 
