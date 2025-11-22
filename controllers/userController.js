@@ -23,6 +23,15 @@ exports.registerUser = async (req, res) => {
     try {
         const { name, age, email, password } = req.body;
 
+            // Checking if email already exists
+            const existingUser = await User.findOne({ email });
+
+            if (existingUser) {
+                // Using flash messages (recommended)
+                req.flash("error", "Email already exists. Try another email.");
+                return res.redirect('../register');
+            }
+
            // Hash password
            const hashedPassword = await bcrypt.hash(password, 12);
 

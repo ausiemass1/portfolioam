@@ -11,6 +11,25 @@ require('dotenv').config();
 
 const mongoose = require('mongoose');
 
+const session = require('express-session');
+const flash = require('connect-flash');
+
+app.use(session({
+    secret: 'yourSecretKey',
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(flash());
+
+// Make flash messages available in all EJS files
+app.use((req, res, next) => {
+    res.locals.error = req.flash('error');
+    res.locals.success = req.flash('success');
+    next();
+});
+
+
 
 // MongoDB connection
 mongoose.connect(process.env.DATABASE)
