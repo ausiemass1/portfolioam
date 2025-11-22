@@ -8,7 +8,11 @@
 
     <label>Age</label>
     <input type="number" name="age" min="1" required><br>
-
+    <% if (error && error.length > 0) { %>
+        <div class="red-text">
+            <%= error[0] %>
+        </div>
+    <% } %>
     <label>Email</label>
     <input type="email" name="email" required><br>
 
