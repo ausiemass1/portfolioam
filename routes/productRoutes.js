@@ -23,13 +23,13 @@ router.post('/addproduct',   upload.single('image'), auth, productController.add
 
 // Define routes
 router.get('/',  productController.displayProducts);
-router.get('/all', productController.addProduct);
+// router.get('/all', productController.addProduct);
 router.get('/delete/:id', productController.deleteProduct);
 router.get('/edit/:id', productController.editProductForm);
 
 // POST 
-router.post('/update/:id', productController.updateProduct);
 
+
+router.post('/update/:id', upload.single('image'), productController.updateProduct);
 
 module.exports = router;
-
