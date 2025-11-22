@@ -52,7 +52,7 @@ const productRoutes = require('./routes/productRoutes');
 
 app.use('/users', userRoutes);
 app.use('/', indexRoutes);
-app.use('/product', auth,  productRoutes);
+app.use('/products', auth,  productRoutes);
 
 // --------------------
 // START SERVER
