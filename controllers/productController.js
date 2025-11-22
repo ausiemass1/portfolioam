@@ -1,29 +1,5 @@
 const Product = require('../models/productsModel')
-
-// exports.addProduct = async (req, res) => {
-//     try {
-//         const { product_name, price, image } = req.body;
-
-    
-
-//         // Create new product document
-//         const newProduct = new Product({
-//             product_name,
-//             price,
-//             image,
-          
-//         });
-
-//         await newProduct.save();
-
-//         //res.send("product added successfully!");
-//         res.redirect('../product');
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).send("Product not added");
-//     }
-// };
-
+// add product to database
 exports.addProduct = async (req, res) => {
   try {
     const { product_name, price } = req.body;
@@ -36,14 +12,14 @@ exports.addProduct = async (req, res) => {
       image: imagePath
     });
 
-    res.send("Product added successfully!");
+    res.redirect("/product");
   } catch (error) {
     console.error(error);
     res.status(500).send("Error adding product");
   }
 };
 
-
+// delete a product
 exports.deleteProduct = async (req, res) => {
     try {
       const productId = req.params.id;  // Get the product ID from the URL
@@ -56,7 +32,7 @@ exports.deleteProduct = async (req, res) => {
     }
   };
   
-  // Show the edit form
+  // Show the edit product form
   exports.editProductForm = async (req, res) => {
     try {
       const Product = await Product.findById(req.params.id);
@@ -67,7 +43,7 @@ exports.deleteProduct = async (req, res) => {
     }
   };
   
-  //Update the form
+  //Update the product form
   exports.updateProduct = async (req, res) => {
     try {
       const id = req.params.id;
@@ -86,6 +62,8 @@ exports.deleteProduct = async (req, res) => {
     }
   };
 
+
+// display all Products
   exports.displayProducts = async (req,res) => {
-    res.render("pages/product", { title: "product" });
+    res.render("pages/addProduct", { title: "product" });
   };

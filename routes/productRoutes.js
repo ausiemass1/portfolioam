@@ -5,20 +5,20 @@ const auth = require("../middleware/auth");
 const multer = require('multer');
 const path = require('path');
 
-// Multer storage config
+
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); 
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname);
-  }
-});
+    destination: (req, file, cb) => {
+      cb(null, path.join(__dirname, '../public/uploads')); 
+    },
+    filename: (req, file, cb) => {
+      cb(null, Date.now() + '-' + file.originalname);
+    }
+  });
 
 const upload = multer({ storage });
 
 // Add product route
-router.post('/addproduct', upload.single('image'), productController.addProduct);
+router.post('/addproduct',   upload.single('image'), auth, productController.addProduct);
 
 
 // Define routes

@@ -5,6 +5,7 @@ const path = require("path");
 const app = express();
 const cookieParser = require("cookie-parser");
 const refreshToken = require("./middleware/refreshToken");
+const auth = require("./middleware/auth");
 
 require('dotenv').config();
 
@@ -51,7 +52,7 @@ const productRoutes = require('./routes/productRoutes');
 
 app.use('/users', userRoutes);
 app.use('/', indexRoutes);
-app.use('/product', productRoutes);
+app.use('/product', auth,  productRoutes);
 
 // --------------------
 // START SERVER
