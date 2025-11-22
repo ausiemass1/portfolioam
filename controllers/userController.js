@@ -96,7 +96,7 @@ exports.deleteUser = async (req, res) => {
 exports.editUserForm = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    res.render('pages/update', { title: "Edit User", user });
+    res.render('pages/updateUser', { title: "Edit User", user });
   } catch (error) {
     console.error(error);
     res.status(500).send("Error loading edit form");

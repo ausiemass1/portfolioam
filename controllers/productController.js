@@ -63,7 +63,18 @@ exports.deleteProduct = async (req, res) => {
   };
 
 
-// display all Products
-  exports.displayProducts = async (req,res) => {
-    res.render("pages/addProduct", { title: "product" });
-  };
+
+  // display all Products
+exports.displayProducts = async (req, res) => {
+  try {
+    const products = await Product.find(); // find all products
+
+    res.render("pages/Product", { 
+      title: "product", 
+      products 
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving products");
+  }
+};
