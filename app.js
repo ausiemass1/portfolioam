@@ -1,18 +1,24 @@
+require('dotenv').config();
 // Import dependencies
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const path = require("path");
-const app = express();
 const cookieParser = require("cookie-parser");
 const refreshToken = require("./middleware/refreshToken");
 const auth = require("./middleware/auth");
-
-require('dotenv').config();
-
+const passport = require("passport");
+const GoogleStrategy = require('passport-google-oauth20');
 const mongoose = require('mongoose');
-
 const session = require('express-session');
 const flash = require('connect-flash');
+const userRoutes = require('./routes/users');
+const indexRoutes = require('./routes/home');
+const productRoutes = require('./routes/productRoutes');
+const authRoutes = require('./routes/authRoutes');
+
+const { profile } = require("console");
+
+const app = express();
 
 app.use(session({
     secret: 'yourSecretKey',
@@ -28,7 +34,6 @@ app.use((req, res, next) => {
     res.locals.success = req.flash('success');
     next();
 });
-
 
 
 // MongoDB connection
@@ -54,24 +59,41 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+
 // Serve static files (CSS, JS, images) from /public
 app.use(express.static(path.join(__dirname, "public")));
-app.use(refreshToken);
+
 
 // Serve uploaded images
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(passport.initialize()); // initialise the process of login in
+app.use(passport.session()); // use session
+
+
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENTID,
+  clientSecret: process.env.GOOGLE_SECRET,
+  callbackURL: process.env.GOOGLE_CALLBACKURL
+},(accessToken, refreshToken, profile, done) => {
+  return done(null, profile)
+}
+));
+passport.serializeUser((user, done)=>done(null, user));
+passport.deserializeUser((user, done) => done(null, user));
+app.use('/auth', authRoutes);
+
+app.use(refreshToken);
 
 // --------------------
 // ROUTES
 // --------------------
 
-const userRoutes = require('./routes/users');
-const indexRoutes = require('./routes/home');
-const productRoutes = require('./routes/productRoutes');
+
 
 app.use('/users', userRoutes);
 app.use('/', indexRoutes);
 app.use('/products', auth,  productRoutes);
+
 
 // --------------------
 // START SERVER

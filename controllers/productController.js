@@ -1,5 +1,5 @@
 const Product = require('../models/productsModel')
-// add product to database
+// add product to database (Create an entry)
 exports.addProduct = async (req, res) => {
   try {
     const { product_name, price } = req.body;
@@ -18,21 +18,23 @@ exports.addProduct = async (req, res) => {
     res.status(500).send("Error adding product");
   }
 };
+// display all products  (Read from Database)
+exports.displayProducts = async (req, res) => {
+  try {
+    const products = await Product.find(); // find all products
 
-// delete a product
-exports.deleteProduct = async (req, res) => {
-    try {
-      const productId = req.params.id;  // Get the product ID from the URL
-      await Product.findByIdAndDelete(productId); // Delete the product from the DB
-  
-      res.redirect('/products'); // After deleting, go back to the product list page
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Error deleting product');
-    }
-  };
-  
-// Show edit product form
+    res.render("pages/Product", { 
+      title: "product", 
+      products,
+      user: req.user  
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving products");
+  }
+};
+ 
+// Show edit product form (Update)
 exports.editProductForm = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -47,7 +49,7 @@ exports.editProductForm = async (req, res) => {
   }
 };
 
-// Update product
+// Update product  (Update )
 exports.updateProduct = async (req, res) => {
   try {
     const id = req.params.id;
@@ -71,19 +73,15 @@ exports.updateProduct = async (req, res) => {
   }
 };
 
-
-
-  // display all Products
-exports.displayProducts = async (req, res) => {
+// delete a product  (Delete)
+exports.deleteProduct = async (req, res) => {
   try {
-    const products = await Product.find(); // find all products
+    const productId = req.params.id;  // Get the product ID from the URL
+    await Product.findByIdAndDelete(productId); // Delete the product from the DB
 
-    res.render("pages/Product", { 
-      title: "product", 
-      products 
-    });
+    res.redirect('/products'); // After deleting, go back to the product list page
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error retrieving products");
+    res.status(500).send('Error deleting product');
   }
 };
