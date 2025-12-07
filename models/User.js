@@ -6,7 +6,8 @@ const userSchema = new mongoose.Schema({
   age: Number,
   email: String,
   password: String,
-
+  googleId: String,  
+  githubId: String,
 
   // Add role field
   role: {

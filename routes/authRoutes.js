@@ -6,19 +6,13 @@ const passport = require('passport');
 
 
 
-
+//redirect to google
 router.get('/google', googleAuth.googleLogin);
-// Logout route
-router.get("/logout", authController.logout);
 
-// router.get(
-//     "/google/callback",
-//     googleAuth.googleCallback,
-//     authController.loginSuccess
-//   );
+//redirect to github
+router.get('/github', googleAuth.githubLogin);
 
-
-
+//login with google
   router.get("/google/callback",
   passport.authenticate("google", {
      failureRedirect: "/login"
@@ -26,4 +20,15 @@ router.get("/logout", authController.logout);
   authController.loginSuccess
 );
 
+
+//login with github
+router.get("/github/callback",
+passport.authenticate("github", {
+   failureRedirect: "/login"
+}),
+authController.loginSuccess
+);
+
+// Logout route
+router.get("/logout", authController.logout);
 module.exports = router;

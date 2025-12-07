@@ -1,0 +1,217 @@
+<%
+function getUserName(user) {
+    if (!user) return "User";
+
+    if (user.displayName) return user.displayName.split(" ")[0];  // Google
+    if (user.username) return user.username;                       // GitHub
+    if (user.name) return user.name.split(" ")[0];                 // MongoDB local user
+
+    return "User";
+}
+%>
+
+<h4 class="center-align">
+    Welcome <%= getUserName(user) %>
+</h4>
+
+
+
+<h5 class="center-align grey-text text-darken-2">Admin Dashboard</h5>
+
+<div class="row">
+
+    <!-- ========================= -->
+    <!-- LEFT SIDEBAR FILTERS -->
+    <!-- ========================= -->
+    <div class="col s12 m3">
+
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Filters</span>
+
+                <form action="/admin/dashboard" method="GET">
+
+                    <!-- Search -->
+                    <div class="input-field">
+                        <input type="text" name="search" id="search" 
+                          value="<%= typeof search !== 'undefined' ? search : '' %>">
+                        <label for="search">Search Products</label>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="input-field">
+                        <select name="category">
+                            <option value="">All Categories</option>
+                            <% if (categories) { %>
+                                <% categories.forEach(c => { %>
+                                    <option value="<%= c._id %>" 
+                                        <%= category == c._id ? "selected" : "" %>>
+                                        <%= c.name %>
+                                    </option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                        <label>Category</label>
+                    </div>
+
+                    <!-- Size -->
+                    <div class="input-field">
+                        <select name="size">
+                            <option value="">All Sizes</option>
+                            <% if (sizes) { %>
+                                <% sizes.forEach(s => { %>
+                                    <option value="<%= s.value %>"
+                                        <%= selectedSize == s.value ? "selected" : "" %>>
+                                        <%= s.value %>
+                                    </option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                        <label>Size</label>
+                    </div>
+
+                    <!-- Price Range -->
+                    <div class="input-field">
+                        <input type="number" name="minPrice" 
+                          value="<%= minPrice || '' %>">
+                        <label>Min Price</label>
+                    </div>
+
+                    <div class="input-field">
+                        <input type="number" name="maxPrice" 
+                          value="<%= maxPrice || '' %>">
+                        <label>Max Price</label>
+                    </div>
+
+                    <button class="btn blue waves-effect full-width" type="submit">
+                        <i class="material-icons left">filter_list</i> Apply Filters
+                    </button>
+
+                    <a href="/admin/dashboard" class="btn-flat full-width">
+                        Reset
+                    </a>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- RIGHT MAIN CONTENT -->
+    <!-- ========================= -->
+    <div class="col s12 m9">
+
+        <!-- STAT CARDS -->
+        <div class="row">
+
+            <div class="col s12 m4">
+                <div class="card blue lighten-2">
+                    <div class="card-content white-text center-align">
+                        <i class="material-icons large">shopping_bag</i>
+                        <h4><%= products.length %></h4>
+                        <p>Total Products</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col s12 m4">
+                <div class="card teal lighten-2">
+                    <div class="card-content white-text center-align">
+                        <i class="material-icons large">category</i>
+                        <h4>--</h4>
+                        <p>Total Categories</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col s12 m4">
+                <div class="card orange lighten-2">
+                    <div class="card-content white-text center-align">
+                        <i class="material-icons large">straighten</i>
+                        <h4>--</h4>
+                        <p>Total Sizes</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <h5 class="section-title">Quick Actions</h5>
+
+        <div class="row">
+            <div class="col s12 m4">
+                <a href="/admin/products/new">
+                    <div class="card white hoverable">
+                        <div class="card-content center-align">
+                            <i class="material-icons large blue-text">add_circle</i>
+                            <h6>Add New Product</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col s12 m4">
+                <a href="/admin/categories">
+                    <div class="card white hoverable">
+                        <div class="card-content center-align">
+                            <i class="material-icons large teal-text">list</i>
+                            <h6>Manage Categories</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col s12 m4">
+                <a href="/admin/sizes">
+                    <div class="card white hoverable">
+                        <div class="card-content center-align">
+                            <i class="material-icons large orange-text">straighten</i>
+                            <h6>Manage Sizes</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- RECENT PRODUCTS -->
+        <h5 class="section-title">Recent Products</h5>
+
+        <ul class="collection">
+            <% if (products.length === 0) { %>
+                <li class="collection-item center-align grey-text">
+                    No products found.
+                </li>
+            <% } %>
+
+            <% products.slice(0, 5).forEach(product => { %>
+                <li class="collection-item avatar">
+                    <i class="material-icons circle blue">shopping_bag</i>
+
+                    <span class="title"><strong><%= product.name %></strong></span>
+                    <p>
+                        Price: $<%= product.price %> <br>
+                        Category: <%= product.category ? product.category.name : "None" %>
+                    </p>
+
+                    <a href="/admin/products/<%= product._id %>/edit" class="secondary-content">
+                        <i class="material-icons">edit</i>
+                    </a>
+                </li>
+            <% }) %>
+        </ul>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('select');
+        M.FormSelect.init(elems);
+    });
+</script>
+
+
+
+

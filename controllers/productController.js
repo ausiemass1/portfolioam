@@ -1,20 +1,65 @@
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const path = require("path");
+const crypto = require("crypto");
 const Product = require('../models/productsModel')
-// add product to database (Create an entry)
+
+
+// authenticating with S3
+const s3 = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  }
+});
+//get product add form
+
+exports.addProductform = (req, res) => {
+  try {
+    
+
+    res.render('pages/addproduct', { 
+      title: "Add Product", 
+
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error loading edit form");
+  }
+}
+// uploading product to s3
 exports.addProduct = async (req, res) => {
   try {
     const { product_name, price } = req.body;
 
-    const imagePath = req.file ? `/uploads/${req.file.filename}` : '';
+    let imageUrl = "";
+
+    // If an image was uploaded
+    if (req.file) {
+      const fileName = `products/${crypto.randomBytes(16).toString("hex")}${path.extname(req.file.originalname)}`;
+
+      const params = {
+        Bucket: process.env.AWS_S3_BUCKET,
+        Key: fileName,
+        Body: req.file.buffer,
+        ContentType: req.file.mimetype,
+      };
+
+      await s3.send(new PutObjectCommand(params));
+
+      // Public S3 URL
+      imageUrl = `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`;
+    }
 
     await Product.create({
       product_name,
       price,
-      image: imagePath
+      image: imageUrl
     });
 
-    res.redirect("/products");
+    res.redirect("/admin/dashboard");
   } catch (error) {
-    console.error(error);
+    console.error("Error uploading to S3:", error);
     res.status(500).send("Error adding product");
   }
 };

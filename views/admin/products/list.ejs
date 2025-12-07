@@ -1,0 +1,49 @@
+<%- include('../layout') %>
+
+<div class="row">
+    <div class="col s6">
+        <h4>Products</h4>
+    </div>
+    <div class="col s6 right-align">
+        <a href="/admin/products/new" class="btn waves-effect blue">Add Product</a>
+    </div>
+</div>
+
+<table class="highlight centered responsive-table">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Sizes</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <% products.forEach(p => { %>
+        <tr>
+            <td>
+                <img src="<%= p.images[0] %>" width="60">
+            </td>
+            <td><%= p.name %></td>
+            <td><%= p.category.name %></td>
+            <td>
+                <% p.sizes.forEach(s => { %>
+                    <span class="new badge blue" data-badge-caption=""><%= s.label %></span>
+                <% }) %>
+            </td>
+            <td>£<%= p.price %></td>
+
+            <td>
+                <a href="/admin/products/<%= p._id %>/edit" class="btn-small orange">Edit</a>
+
+                <form method="POST" action="/admin/products/<%= p._id %>/delete" style="display:inline;">
+                    <button class="btn-small red">Delete</button>
+                </form>
+            </td>
+        </tr>
+        <% }) %>
+    </tbody>
+</table>

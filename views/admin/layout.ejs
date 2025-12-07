@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Admin Dashboard</title>
+
+    <!-- Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+            /* Base layout */
+            html,
+            body {
+              height: 100%;
+              margin: 0;
+              padding: 0;
+              display: flex;
+              flex-direction: column;
+            }
+      
+            /* Let main fill remaining space */
+            main {
+              flex: 1 0 auto;
+            }
+      
+            /* Keep footer at the bottom */
+            footer.page-footer {
+              margin-top: auto;
+              width: 100%;
+              padding-top: 10px;
+              padding-bottom: 10px;
+            }
+      
+            /* Optional: fix Materialize container margin */
+            footer .container {
+              margin-bottom: 0;
+            }
+        .nav-wrapper { padding: 0 20px; }
+        .container { margin-top: 30px; }
+        .card-stats .card-content i { font-size: 40px; }
+        table img { border-radius: 5px; }
+    </style>
+
+</head>
+
+<body>
+
+<nav class="blue darken-3">
+    <div class="nav-wrapper">
+        <a href="/admin/dashboard" class="brand-logo">Admin Panel</a>
+
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/admin/products">Products</a></li>
+            <li><a href="/admin/categories">Categories</a></li>
+            <li><a href="/admin/sizes">Sizes</a></li>
+            <li><a href="/auth/logout" class="red-text text-lighten-2">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="">
+    <%- body %>
+</div>
+
+<!-- Materialize JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+ <!-- footer -->
+ <%- include('../partials/footer.ejs') %>
+ <!-- jQuery (must come first) -->
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+ <!-- Compiled and minified JavaScript -->
+ 
+
+
+</body>
+</html>

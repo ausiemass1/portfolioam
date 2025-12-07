@@ -1,0 +1,22 @@
+<%- include('../layout') %>
+
+<div class="row">
+    <div class="col s6">
+        <h4>Sizes</h4>
+    </div>
+    <div class="col s6 right-align">
+        <a href="/admin/sizes/new" class="btn blue">Add Size</a>
+    </div>
+</div>
+
+<ul class="collection">
+    <% sizes.forEach(size => { %>
+        <li class="collection-item">
+            <%= size.label %>
+
+            <form action="/admin/sizes/<%= size._id %>/delete" method="POST" class="secondary-content">
+                <button class="btn-small red">Delete</button>
+            </form>
+        </li>
+    <% }) %>
+</ul>

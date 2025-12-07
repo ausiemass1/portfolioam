@@ -1,6 +1,21 @@
 
 <section class="container mt-4">
-  <h1>welcome <%= user.displayName.split(" ")[0] %></h1>
+  <%
+function getUserName(user) {
+    if (!user) return "User";
+
+    if (user.displayName) return user.displayName.split(" ")[0];  // Google
+    if (user.username) return user.username;                       // GitHub
+    if (user.name) return user.name.split(" ")[0];                 // MongoDB local user
+
+    return "User";
+}
+%>
+
+<h4 class="center-align">
+    Welcome <%= getUserName(user) %>
+</h4>
+
     <h1><%= title %></h1>
   
     <% if (products.length === 0) { %>
@@ -48,7 +63,9 @@
   
     <hr>
   
-
+ <form action="/paypal/pay" method="post">
+  <input type="submit" value="Pay Now">
+ </form>
   </section>
   
 

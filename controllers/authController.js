@@ -1,6 +1,6 @@
 // controllers/authController.js
 exports.loginSuccess = (req, res) => {
-    res.redirect("/products");
+    res.redirect("/admin/dashboard");
   };
   exports.logout = (req, res) => {
     // Passport logout

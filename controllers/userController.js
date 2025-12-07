@@ -82,7 +82,7 @@ exports.loginUser = async (req, res) => {
       maxAge: 2 * 60 * 1000,  }); // automatic logout after 2 minutes
 
       // res.send("Login successful!");
-      res.redirect('/users');
+      res.redirect('/admin/dashboard');
   } catch (err) {
       console.error(err);
       res.status(500).send("Server error");

@@ -1,0 +1,22 @@
+<%- include('../layout') %>
+
+<div class="row">
+    <div class="col s6">
+        <h4>Categories</h4>
+    </div>
+    <div class="col s6 right-align">
+        <a href="/admin/categories/new" class="btn blue">Add Category</a>
+    </div>
+</div>
+
+<ul class="collection">
+    <% categories.forEach(cat => { %>
+        <li class="collection-item">
+            <%= cat.name %>
+
+            <form action="/admin/categories/<%= cat._id %>/delete" method="POST" class="secondary-content">
+                <button class="btn-small red">Delete</button>
+            </form>
+        </li>
+    <% }) %>
+</ul>
