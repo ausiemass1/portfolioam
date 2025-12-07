@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 // Import dependencies
 const express = require("express");
 const app = express();
@@ -8,45 +8,45 @@ const cookieParser = require("cookie-parser");
 const refreshToken = require("./middleware/refreshToken");
 const auth = require("./middleware/auth");
 const passport = require("passport");
-const GoogleStrategy = require('passport-google-oauth20');
-const GithubStrategy = require('passport-github2');
-const mongoose = require('mongoose');
-const session = require('express-session');
-const flash = require('connect-flash');
+const GoogleStrategy = require("passport-google-oauth20");
+const GithubStrategy = require("passport-github2");
+const mongoose = require("mongoose");
+const session = require("express-session");
+const flash = require("connect-flash");
 
 // custom imports
-const userRoutes = require('./routes/users');
-const indexRoutes = require('./routes/home');
-const productRoutes = require('./routes/productRoutes');
-const authRoutes = require('./routes/authRoutes');
-const adminRoutes = require('./routes/adminRoutes');
-const paypalRoutes = require('./routes/paypalRoutes')
-const paypal = require('./helpers/paypal')
+const userRoutes = require("./routes/users");
+const indexRoutes = require("./routes/home");
+const productRoutes = require("./routes/productRoutes");
+const authRoutes = require("./routes/authRoutes");
+const adminRoutes = require("./routes/adminRoutes");
+const paypalRoutes = require("./routes/paypalRoutes");
+const paypal = require("./helpers/paypal");
 
 const { profile } = require("console");
 
-
-
-app.use(session({
-    secret: 'yourSecretKey',
+app.use(
+  session({
+    secret: "yourSecretKey",
     resave: false,
-    saveUninitialized: false
-}));
+    saveUninitialized: false,
+  })
+);
 
 app.use(flash());
 
 // Make flash messages available in all EJS files
 app.use((req, res, next) => {
-    res.locals.error = req.flash('error');
-    res.locals.success = req.flash('success');
-    next();
+  res.locals.error = req.flash("error");
+  res.locals.success = req.flash("success");
+  next();
 });
 
-
 // MongoDB connection
-mongoose.connect(process.env.DATABASE)
-  .then(() => console.log('✅ Connected to MongoDB'))
-  .catch(err => console.error('❌ MongoDB connection error:', err));
+mongoose
+  .connect(process.env.DATABASE)
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 // --------------------
 // VIEW ENGINE SETUP
@@ -62,59 +62,61 @@ app.set("layout", "./layout"); // This tells Express to use views/layout.ejs as 
 // MIDDLEWARE
 // --------------------
 // Parse form data (optional)
-app.use(cookieParser());   
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
 
 // Serve static files (CSS, JS, images) from /public
 app.use(express.static(path.join(__dirname, "public")));
 
-
 // Serve uploaded images
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(passport.initialize()); // initialise the process of login in
 app.use(passport.session()); // use session
 
 // login with google
-passport.use(new GoogleStrategy({
-  clientID: process.env.GOOGLE_CLIENTID,
-  clientSecret: process.env.GOOGLE_SECRET,
-  callbackURL: process.env.GOOGLE_CALLBACKURL
-},(accessToken, refreshToken, profile, done) => {
-  return done(null, profile)
-}
-));
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENTID,
+      clientSecret: process.env.GOOGLE_SECRET,
+      callbackURL: process.env.GOOGLE_CALLBACKURL,
+    },
+    (accessToken, refreshToken, profile, done) => {
+      return done(null, profile);
+    }
+  )
+);
 
 // login with github
-passport.use(new GithubStrategy({
-  clientID: process.env.GITHUB_CLIENTID,
-  clientSecret: process.env.GITHUB_SECRET,
-  callbackURL: "http://localhost:3000/auth/github/callback",
-  scope: ['user:email']
-}, (accessToken, refreshToken, profile, done) => {
-  return done(null, profile);
-}));
+passport.use(
+  new GithubStrategy(
+    {
+      clientID: process.env.GITHUB_CLIENTID,
+      clientSecret: process.env.GITHUB_SECRET,
+      callbackURL: "http://localhost:3000/auth/github/callback",
+      scope: ["user:email"],
+    },
+    (accessToken, refreshToken, profile, done) => {
+      return done(null, profile);
+    }
+  )
+);
 
-
-passport.serializeUser((user, done)=>done(null, user));
+passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
-app.use('/auth', authRoutes);
+app.use("/auth", authRoutes);
 
 app.use(refreshToken);
 
 // --------------------
 // ROUTES
 // --------------------
-
-
-
-app.use('/users', userRoutes);
-app.use('/admin', adminRoutes);
-app.use('/', indexRoutes);
-app.use('/products',  productRoutes);
-app.use('/paypal', paypalRoutes)
-
+app.use("/users", userRoutes);
+app.use("/admin", adminRoutes);
+app.use("/", indexRoutes);
+app.use("/products", productRoutes);
+app.use("/paypal", paypalRoutes);
 
 // --------------------
 // START SERVER
