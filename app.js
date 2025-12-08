@@ -22,6 +22,7 @@ const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const paypalRoutes = require("./routes/paypalRoutes");
 const paypal = require("./helpers/paypal");
+const connectDB = require("./config/db");
 
 const { profile } = require("console");
 
@@ -43,10 +44,7 @@ app.use((req, res, next) => {
 });
 
 // MongoDB connection
-mongoose
-  .connect(process.env.DATABASE)
-  .then(() => console.log("✅ Connected to MongoDB"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
+connectDB(); // this runs the code tha is in the config/db.js
 
 // --------------------
 // VIEW ENGINE SETUP
