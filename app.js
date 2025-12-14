@@ -62,8 +62,7 @@ app.set("layout", "./layout"); // This tells Express to use views/layout.ejs as 
 // --------------------
 // Parse form data (optional)
 app.use(cookieParser());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+
 
 // Serve static files (CSS, JS, images) from /public
 app.use(express.static(path.join(__dirname, "public")));
@@ -117,6 +116,9 @@ app.use("/", indexRoutes);
 app.use("/products", productRoutes);
 app.use("/paypal", paypalRoutes);
 app.use("/api/payments", paymentRoutes);
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 
 // --------------------
