@@ -6,6 +6,21 @@ const orderSchema = new mongoose.Schema({
   customerEmail: String,
   customerName: String,
 
+  // Order status lifecycle
+  status: {
+    type: String,
+    enum: [
+      "pending",     // payment confirmed, not yet processed
+      "processing",  // being prepared / packed
+      "shipped",     // handed to courier
+      "delivered",   // delivered to customer
+      "cancelled",
+      "refunded"
+    ],
+    default: "pending",
+    index: true
+  },
+
   // Shipping address from Stripe
   shipping: {
     name: String,
@@ -45,4 +60,5 @@ const orderSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.models.Order || mongoose.model("Order", orderSchema);
+module.exports =
+  mongoose.models.Order || mongoose.model("Order", orderSchema);

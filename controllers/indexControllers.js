@@ -1,6 +1,7 @@
 const stripe = require("../config/stripe");
 const Order = require("../models/orderModel");
-const endpointSecret = "whsec_6735a303464e5563ee3f67a5fd3ee324284e2b9b19d1bfa52911240a65144f71";
+const endpointSecret =
+  "whsec_6735a303464e5563ee3f67a5fd3ee324284e2b9b19d1bfa52911240a65144f71";
 exports.stripeCheckout = (req, res) => {
   res.render("pages/checkout", { title: "checkout" });
 };
@@ -38,12 +39,11 @@ exports.stripeCheckoutSessionCreate = async (req, res) => {
 
 // stripe success route which also save to database
 exports.stripeSuccess = async (req, res) => {
-res.redirect('/')
+  res.redirect("/");
 };
 
 //Stripe cancel route, when the custoer decides to cancel the payment
 exports.stripeCancel = (req, res) => {
-
   res.redirect("/checkout");
 };
 
@@ -106,6 +106,26 @@ exports.stripeWebhook = async (req, res) => {
       break;
     }
 
+    case "payment_intent.succeeded": {
+      console.log(event.data);
+      break;
+    }
+
+    // this is for creating payment intent (redirecting to stripe page)
+    case "payment_intent.created": {
+      console.log(event.data);
+      break;
+    }
+
+    // this is for updaing the charge
+    case "charge.updated":
+      {
+        console.log(event.data);
+        break;
+      }
+
+      charge.updated;
+
     default:
       console.log(`Ignoring event type: ${event.type}`);
   }
@@ -113,4 +133,3 @@ exports.stripeWebhook = async (req, res) => {
   // ✅ Always acknowledge receipt
   res.sendStatus(200);
 };
-
