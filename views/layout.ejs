@@ -4,8 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title || austin %></title>
-    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
-
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
 
     <!-- Google Material Icons -->
     <link
@@ -18,36 +17,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
-<link rel="stylesheet" href="/public/css/styles.css">
-     <style>
-      /* Base layout */
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-      }
-
-      /* Let main fill remaining space */
-      main {
-        flex: 1 0 auto;
-      }
-
-      /* Keep footer at the bottom */
-      footer.page-footer {
-        margin-top: auto;
-        width: 100%;
-        padding-top: 10px;
-        padding-bottom: 10px;
-      }
-
-      /* Optional: fix Materialize container margin */
-      footer .container {
-        margin-bottom: 0;
-      }
-    </style> 
+    <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body>
     <!-- Navbar -->
@@ -64,5 +34,8 @@
 
     <!-- Init script -->
     <script src="/js/script.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/checkout.js"></script>
   </body>
 </html>

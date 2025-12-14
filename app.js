@@ -15,14 +15,15 @@ const session = require("express-session");
 const flash = require("connect-flash");
 
 // custom imports
-const userRoutes = require("./routes/users");
-const indexRoutes = require("./routes/home");
+const userRoutes = require("./routes/usersRoutes");
+const indexRoutes = require("./routes/indexRoutes");
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const paypalRoutes = require("./routes/paypalRoutes");
 const paypal = require("./helpers/paypal");
 const connectDB = require("./config/db");
+const paymentRoutes =require("./routes/paymentRoutes");
 
 const { profile } = require("console");
 
@@ -115,6 +116,8 @@ app.use("/admin", adminRoutes);
 app.use("/", indexRoutes);
 app.use("/products", productRoutes);
 app.use("/paypal", paypalRoutes);
+app.use("/api/payments", paymentRoutes);
+
 
 // --------------------
 // START SERVER

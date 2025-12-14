@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const indexControllers = require('../controllers/indexControllers')
 
 //Home page
 router.get("/", (req, res) => {
@@ -24,5 +25,8 @@ router.get("/login", (req, res) => {
 router.get("/register", (req, res) => {
   res.render("pages/register", { title: "register" });
 });
-
+router.get("/checkout", indexControllers.stripeCheckout);
+router.post("/checkout", indexControllers.stripeCheckoutSessionCreate);
+router.get("/success", indexControllers.stripeSuccess);
+router.get("/cancel", indexControllers.stripeCancel);
 module.exports = router;
