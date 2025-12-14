@@ -29,4 +29,6 @@ router.get("/checkout", indexControllers.stripeCheckout);
 router.post("/checkout", indexControllers.stripeCheckoutSessionCreate);
 router.get("/success", indexControllers.stripeSuccess);
 router.get("/cancel", indexControllers.stripeCancel);
+router.post("/webhook", express.raw({type: 'application/json'}), indexControllers.stripeWebhook);
+
 module.exports = router;
