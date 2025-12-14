@@ -1,7 +1,6 @@
 const stripe = require("../config/stripe");
 const Order = require("../models/orderModel");
-const endpointSecret =
-  "whsec_6735a303464e5563ee3f67a5fd3ee324284e2b9b19d1bfa52911240a65144f71";
+
 exports.stripeCheckout = (req, res) => {
   res.render("pages/checkout", { title: "checkout" });
 };
@@ -47,6 +46,7 @@ exports.stripeCancel = (req, res) => {
   res.redirect("/checkout");
 };
 
+// stripe wbhook
 exports.stripeWebhook = async (req, res) => {
   const signature = req.headers["stripe-signature"];
   let event;
