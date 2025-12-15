@@ -124,12 +124,14 @@ PAYPAL_CLIENT_ID=your_paypal_client_id
 PAYPAL_SECRET=your_paypal_secret
 
 
-## Getting Started
-Install dependencies
+## ▶️ Getting Started
+
+Follow the steps below to run the application locally.
+
+### Install Dependencies
+```bash
 npm install
 
-Run the application
-npm run dev
 
 
 or
