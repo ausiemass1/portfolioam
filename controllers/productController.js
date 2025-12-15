@@ -66,12 +66,16 @@ exports.addProduct = async (req, res) => {
 // display all products  (Read from Database)
 exports.displayProducts = async (req, res) => {
   try {
-    const products = await Product.find(); // find all products
+    const products = await Product
+    .find()
+    .populate("category");
 
-    res.render("pages/Product", { 
+    res.render("admin/Products/list", { 
       title: "product", 
       products,
-      user: req.user  
+      user: req.user,
+      layout: 'admin/layout'
+ 
     });
   } catch (error) {
     console.error(error);
