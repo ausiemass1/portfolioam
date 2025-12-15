@@ -1,16 +1,16 @@
 const mongoose = require("mongoose");
 
 module.exports = async () => {
-  const dbURI = process.env.DATABASE.replace(
+  const dbURL = process.env.DATABASE.replace(
     "<PASSWORD>",
     process.env.DATABASE_PASSWORD
   );
 
   try {
-    await mongoose.connect(dbURI);
+    await mongoose.connect(dbURL);
     console.log("✅ Connected to MongoDB");
   } catch (err) {
-    console.error("❌ MongoDB connection error:", err);
+    console.error("MongoDB connection error:", err);
     process.exit(1);
   }
 };
