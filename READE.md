@@ -123,7 +123,7 @@ STRIPE_WEBHOOK_SECRET=your_webhook_secret
 PAYPAL_CLIENT_ID=your_paypal_client_id
 PAYPAL_SECRET=your_paypal_secret
 
-
+```
 ## ▶️ Getting Started
 
 Follow the steps below to run the application locally.
