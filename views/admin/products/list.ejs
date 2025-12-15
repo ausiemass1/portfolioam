@@ -5,7 +5,7 @@
         <h4>Products</h4>
     </div>
     <div class="col s6 right-align">
-        <a href="/admin/products/add" class="btn waves-effect blue">Add Product</a>
+        <a href="/admin/products/addproduct" class="btn waves-effect blue">Add Product</a>
     </div>
 </div>
 
@@ -31,7 +31,7 @@
               
             </td>
             <td><%= p.name %></td>
-            <td><%= p.category.name %></td>
+            <td><%= p.category?.name || "—" %></td>
             <td>
                 <% p.sizes.forEach(s => { %>
                     <span class="new badge blue" data-badge-caption=""><%= s.label %></span>

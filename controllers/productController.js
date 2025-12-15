@@ -32,42 +32,63 @@ exports.addProductform = async (req, res) => {
     res.status(500).send("Error loading edit form");
   }
 }
+
 // uploading product to s3
 exports.addProduct = async (req, res) => {
   try {
-    const { product_name, price } = req.body;
+    const {
+      name,
+      description,
+      price,
+      category
+    } = req.body;
 
-    let imageUrl = "";
+    // sizes can be string (1 checkbox) or array (many)
+    let sizes = req.body.sizes || [];
+    if (!Array.isArray(sizes)) {
+      sizes = [sizes];
+    }
 
-    // If an image was uploaded
-    if (req.file) {
-      const fileName = `products/${crypto.randomBytes(16).toString("hex")}${path.extname(req.file.originalname)}`;
+    const imageUrls = [];
 
-      const params = {
-        Bucket: process.env.AWS_S3_BUCKET,
-        Key: fileName,
-        Body: req.file.buffer,
-        ContentType: req.file.mimetype,
-      };
+    // Upload multiple images to S3
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        const fileName = `products/${crypto
+          .randomBytes(16)
+          .toString("hex")}${path.extname(file.originalname)}`;
 
-      await s3.send(new PutObjectCommand(params));
+        const params = {
+          Bucket: process.env.AWS_S3_BUCKET,
+          Key: fileName,
+          Body: file.buffer,
+          ContentType: file.mimetype
+        };
 
-      // Public S3 URL
-      imageUrl = `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`;
+        await s3.send(new PutObjectCommand(params));
+
+        imageUrls.push(
+          `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`
+        );
+      }
     }
 
     await Product.create({
-      product_name,
+      name,
+      description,
       price,
-      image: imageUrl
+      category,
+      sizes,
+      images: imageUrls
     });
 
-    res.redirect("/admin/dashboard");
+    res.redirect("/admin/products");
   } catch (error) {
-    console.error("Error uploading to S3:", error);
+    console.error("Error uploading product:", error);
     res.status(500).send("Error adding product");
   }
 };
+
 // display all products  (Read from Database)
 exports.displayProducts = async (req, res) => {
   try {
@@ -92,10 +113,13 @@ exports.displayProducts = async (req, res) => {
 exports.editProductForm = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-
-    res.render('pages/editProduct', { 
-      title: "Edit Product", 
-      product
+    const categories = await
+    res.render('admin/products/add', { 
+      title: "Add Product", 
+      categories,
+      sizes,
+      product,
+      layout: 'admin/layout',
     });
   } catch (error) {
     console.error(error);
