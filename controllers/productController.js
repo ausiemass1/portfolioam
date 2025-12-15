@@ -2,7 +2,8 @@ const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const path = require("path");
 const crypto = require("crypto");
 const Product = require('../models/productsModel')
-
+const Category = require('../models/CategoryModel')
+const Size = require('../models/sizesModel')
 
 // authenticating with S3
 const s3 = new S3Client({
@@ -14,12 +15,16 @@ const s3 = new S3Client({
 });
 //get product add form
 
-exports.addProductform = (req, res) => {
+exports.addProductform = async (req, res) => {
   try {
     
-
-    res.render('pages/addproduct', { 
+    const categories = await Category.find();
+    const sizes = await Size.find();
+    res.render('admin/products/add', { 
       title: "Add Product", 
+      categories,
+      sizes,
+      layout: 'admin/layout'
 
     });
   } catch (error) {

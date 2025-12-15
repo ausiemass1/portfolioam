@@ -5,7 +5,7 @@
         <h4>Products</h4>
     </div>
     <div class="col s6 right-align">
-        <a href="/admin/products/new" class="btn waves-effect blue">Add Product</a>
+        <a href="/admin/products/add" class="btn waves-effect blue">Add Product</a>
     </div>
 </div>
 
@@ -37,7 +37,7 @@
                     <span class="new badge blue" data-badge-caption=""><%= s.label %></span>
                 <% }) %>
             </td>
-            <td>£<%= p.price %></td>
+            <td>$<%= p.price %></td>
 
             <td>
                 <a href="/admin/products/<%= p._id %>/edit" class="btn-small orange">Edit</a>
