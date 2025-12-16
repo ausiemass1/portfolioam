@@ -3,88 +3,36 @@
 <p>This content comes from the home view.</p>
 
 <div class="row">
+  <% products.forEach(product => { %>
+
     <div class="col s12 m6 l4">
       <div class="card blue-grey darken-1">
-        <div class="card-content white-text">
-          <span class="card-title">Card Title</span>
-          <p>I am a very simple card. I am good at containing small bits of information.
-          I am convenient because I require little markup to use effectively.</p>
-        </div>
-        <div class="card-action">
-          <a href="#">This is a link</a>
-          <a href="#">This is a link</a>
-        </div>
-      </div>
 
+        <!-- Product image -->
+        <div class="card-image">
+          <img src="<%= product.images %>" alt="<%= product.name %>">
+          <span class="card-title"><%= product.name %></span>
+        </div>
+
+        <!-- Product content -->
+        <div class="card-content white-text">
+          <p><%= product.description %></p>
+          <p class="right-align">
+            <strong>$<%= product.price.toFixed(2) %></strong>
+          </p>
+        </div>
+
+        <!-- Actions -->
+        <div class="card-action">
+          <a href="/products/<%= product._id %>">View</a>
+          <% if (user && user.role === "admin") { %>
+            <a href="/products/edit/<%= product._id %>">Edit</a>
+            <a href="/products/delete/<%= product._id %>" class="red-text">Delete</a>
+          <% } %>
+        </div>
+
+      </div>
     </div>
-    <div class="col s12 m6 l4">
-        <div class="card blue-grey darken-1">
-          <div class="card-content white-text">
-            <span class="card-title">Card Title</span>
-            <p>I am a very simple card. I am good at containing small bits of information.
-            I am convenient because I require little markup to use effectively.</p>
-          </div>
-          <div class="card-action">
-            <a href="#">This is a link</a>
-            <a href="#">This is a link</a>
-          </div>
-        </div>
-  
-      </div>
-      <div class="col s12 m6 l4">
-        <div class="card blue-grey darken-1">
-          <div class="card-content white-text">
-            <span class="card-title">Card Title</span>
-            <p>I am a very simple card. I am good at containing small bits of information.
-            I am convenient because I require little markup to use effectively.</p>
-          </div>
-          <div class="card-action">
-            <a href="#">This is a link</a>
-            <a href="#">This is a link</a>
-          </div>
-        </div>
-  
-      </div>
-      <div class="col s12 m6 l4">
-        <div class="card blue-grey darken-1">
-          <div class="card-content white-text">
-            <span class="card-title">Card Title</span>
-            <p>I am a very simple card. I am good at containing small bits of information.
-            I am convenient because I require little markup to use effectively.</p>
-          </div>
-          <div class="card-action">
-            <a href="#">This is a link</a>
-            <a href="#">This is a link</a>
-          </div>
-        </div>
-  
-      </div>
-      <div class="col s12 m6 l4">
-          <div class="card blue-grey darken-1">
-            <div class="card-content white-text">
-              <span class="card-title">Card Title</span>
-              <p>I am a very simple card. I am good at containing small bits of information.
-              I am convenient because I require little markup to use effectively.</p>
-            </div>
-            <div class="card-action">
-              <a href="#">This is a link</a>
-              <a href="#">This is a link</a>
-            </div>
-          </div>
-    
-        </div>
-        <div class="col s12 m6 l4">
-          <div class="card blue-grey darken-1">
-            <div class="card-content white-text">
-              <span class="card-title">Card Title</span>
-              <p>I am a very simple card. I am good at containing small bits of information.
-              I am convenient because I require little markup to use effectively.</p>
-            </div>
-            <div class="card-action">
-              <a href="#">This is a link</a>
-              <a href="#">This is a link</a>
-            </div>
-          </div>
-    
-        </div>
-  </div>
+
+  <% }) %>
+</div>
