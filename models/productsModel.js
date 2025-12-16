@@ -1,11 +1,31 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-// Define product schema
 const productSchema = new mongoose.Schema({
-  product_name: String,
-  price: String,
-  image: String
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category",
+    required: false
+  },
+
+  name: String,
+  description: String,
+  price: Number,
+
+  images: {
+    type: [String],
+    default: []
+  },
+
+  sizes: {
+    type: [
+      {
+        label: String,
+        value: String
+      }
+    ],
+    default: []
+  }
 });
 
-// Prevent model overwrite if it’s already compiled
-module.exports = mongoose.models.Product || mongoose.model('Product', productSchema);
+module.exports =
+  mongoose.models.Product || mongoose.model("Product", productSchema);

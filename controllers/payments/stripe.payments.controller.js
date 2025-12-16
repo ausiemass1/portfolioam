@@ -1,5 +1,5 @@
-const stripe = require("../config/stripe");
-const Order = require("../models/orderModel");
+const stripe = require("../../config/stripe");
+const Order = require("../../models/orderModel");
 
 exports.stripeCheckout = (req, res) => {
   res.render("pages/checkout", { title: "checkout" });
@@ -25,8 +25,8 @@ exports.stripeCheckoutSessionCreate = async (req, res) => {
       shipping_address_collection: {
         allowed_countries: ["NZ", "US"], // adds shipping to new zealand and united states
       },
-      success_url: `${process.env.WEB_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.WEB_URL}/cancel`,
+      success_url: `${process.env.WEB_URL}/stripe/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.WEB_URL}/stripe/cancel`,
     });
 
     res.redirect(session.url);

@@ -41,14 +41,14 @@ function getUserName(user) {
               <td>
                 <img src="<%= product.image %>" alt="Product Image" width="80" height="80">
               </td>
-             <td> <a href="/products/edit/<%= product._id %>" onclick="return confirm('Edit this product?')">
+             <td> <a href="/admin/products/edit/<%= product._id %>" onclick="return confirm('Edit this product?')">
                 <span class="material-icons" style="color: rgb(30, 0, 255); cursor: pointer;">
                   edit
                 </span>
               </a>
             </td>
             <td>
-                  <a href="/products/delete/<%= product._id %>" onclick="return confirm('Delete this product?')">
+                  <a href="/admin/products/delete/<%= product._id %>" onclick="return confirm('Delete this product?')">
                     <span class="material-icons" style="color: red; cursor: pointer;">
                       delete
                     </span>

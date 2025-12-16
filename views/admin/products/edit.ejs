@@ -1,0 +1,75 @@
+<div class="container">
+    <h4>Edit Product</h4>
+    
+    <form action="/admin/products/<%= product._id %>" method="POST" enctype="multipart/form-data">
+    
+        <div class="input-field">
+            <input type="text" name="name" value="<%= product.name %>">
+            <label>Product Name</label>
+        </div>
+    
+        <!-- Description -->
+  <div class="input-field">
+    <textarea 
+      class="materialize-textarea" 
+      name="description"
+    ><%= product.description %></textarea>
+    <label class="active">Description</label>
+  </div>
+    
+        <div class="input-field">
+            <input type="number" name="price" value="<%= product.price %>">
+            <label>Price</label>
+        </div>
+    
+        <div class="input-field">
+            <select name="category">
+                <% categories.forEach(c => { %>
+                    <option value="<%= c._id %>"><%= c.name %></option>
+                <% }) %>
+            </select>
+            <label>Category</label>
+        </div>
+    
+        <div class="input-field">
+            <label>Sizes</label><br><br>
+            <% sizes.forEach(s => { %>
+                <label>
+                    <input type="checkbox" name="sizes" value="<%= s._id %>">
+                    <span><%= s.label %></span>
+                </label><br>
+            <% }) %>
+        </div>
+    
+        <div class="file-field input-field">
+            <div class="btn blue">
+                <span>Upload Images</span>
+                <input type="file" name="images" multiple>
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+            </div>
+        </div>
+
+         <!-- Existing Images -->
+  <div class="row">
+    <% product.images.forEach(img => { %>
+      <div class="col s3">
+        <img src="<%= img %>" class="responsive-img">
+      </div>
+    <% }) %>
+  </div>
+    
+        <button class="btn waves-effect green">Update Product</button>
+    
+    </form>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('select');
+        M.FormSelect.init(elems);
+    });
+    </script>
+    
+    </div>
+    
