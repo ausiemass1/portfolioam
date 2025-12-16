@@ -1,9 +1,9 @@
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const path = require("path");
 const crypto = require("crypto");
-const Product = require('../models/productsModel')
-const Category = require('../models/CategoryModel')
-const Size = require('../models/sizesModel')
+const Product = require('../../models/productsModel')
+const Category = require('../../models/CategoryModel')
+const Size = require('../../models/sizesModel')
 
 // authenticating with S3
 const s3 = new S3Client({

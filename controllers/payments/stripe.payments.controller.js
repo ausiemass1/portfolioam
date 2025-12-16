@@ -1,5 +1,5 @@
-const stripe = require("../config/stripe");
-const Order = require("../models/orderModel");
+const stripe = require("../../config/stripe");
+const Order = require("../../models/orderModel");
 
 exports.stripeCheckout = (req, res) => {
   res.render("pages/checkout", { title: "checkout" });

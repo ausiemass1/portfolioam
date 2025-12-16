@@ -7,10 +7,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const refreshToken = require("./middleware/refreshToken");
 const auth = require("./middleware/auth");
-const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth20");
-const GithubStrategy = require("passport-github2");
-const mongoose = require("mongoose");
+const passport = require("./config/passort");
 const session = require("express-session");
 const flash = require("connect-flash");
 
@@ -19,7 +16,7 @@ const userRoutes = require("./routes/usersRoutes");
 const indexRoutes = require("./routes/indexRoutes");
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
-const adminRoutes = require("./routes/adminRoutes");
+const adminRoutes = require("./routes/products/admin.products.routes");
 const paypalRoutes = require("./routes/paypalRoutes");
 const paypal = require("./helpers/paypal");
 const connectDB = require("./config/db");
@@ -72,39 +69,10 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(passport.initialize()); // initialise the process of login in
 app.use(passport.session()); // use session
 
-// login with google
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENTID,
-      clientSecret: process.env.GOOGLE_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACKURL,
-    },
-    (accessToken, refreshToken, profile, done) => {
-      return done(null, profile);
-    }
-  )
-);
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-// login with github
-passport.use(
-  new GithubStrategy(
-    {
-      clientID: process.env.GITHUB_CLIENTID,
-      clientSecret: process.env.GITHUB_SECRET,
-      callbackURL: "http://localhost:3000/auth/github/callback",
-      scope: ["user:email"],
-    },
-    (accessToken, refreshToken, profile, done) => {
-      return done(null, profile);
-    }
-  )
-);
-
-passport.serializeUser((user, done) => done(null, user));
-passport.deserializeUser((user, done) => done(null, user));
 app.use("/auth", authRoutes);
-
 app.use(refreshToken);
 
 // --------------------

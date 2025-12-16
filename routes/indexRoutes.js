@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const indexControllers = require('../controllers/indexControllers')
+const indexControllers = require('../controllers/payments/stripe.payments.controller')
 
 //Home page
 router.get("/", (req, res) => {
