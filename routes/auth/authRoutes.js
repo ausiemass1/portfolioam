@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const authController = require("../controllers/auth/authController");
-const googleAuth = require("../middleware/googleAuth");
+const authController = require("../../controllers/auth/authController");
+const googleAuth = require("../../middleware/googleAuth");
 const passport = require("passport");
 
 //redirect to google

@@ -1,10 +1,14 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const indexControllers = require('../controllers/payments/stripe.payments.controller')
-
+const Products = require("../models/productsModel");
 //Home page
-router.get("/", (req, res) => {
-  res.render("pages/index", { title: "Home Page" });
+router.get("/", async (req, res) => {
+  const products = await Products.find();
+  res.render("pages/index", {
+    title: "Home Page",
+    products,
+    user: req.user || null,
+  });
 });
 
 // About page
@@ -25,10 +29,5 @@ router.get("/login", (req, res) => {
 router.get("/register", (req, res) => {
   res.render("pages/register", { title: "register" });
 });
-router.get("/checkout", indexControllers.stripeCheckout);
-router.post("/checkout", indexControllers.stripeCheckoutSessionCreate);
-router.get("/success", indexControllers.stripeSuccess);
-router.get("/cancel", indexControllers.stripeCancel);
-router.post("/webhook", express.raw({type: 'application/json'}), indexControllers.stripeWebhook);
 
 module.exports = router;

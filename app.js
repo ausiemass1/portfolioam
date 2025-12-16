@@ -15,12 +15,13 @@ const flash = require("connect-flash");
 const userRoutes = require("./routes/usersRoutes");
 const indexRoutes = require("./routes/indexRoutes");
 const productRoutes = require("./routes/productRoutes");
-const authRoutes = require("./routes/authRoutes");
+const authRoutes = require("./routes/auth/authRoutes");
 const adminRoutes = require("./routes/products/admin.products.routes");
-const paypalRoutes = require("./routes/paypalRoutes");
+const paypalRoutes = require("./routes/payments/paypalRoutes");
 const paypal = require("./helpers/paypal");
 const connectDB = require("./config/db");
-const paymentRoutes =require("./routes/paymentRoutes");
+const paymentRoutes =require("./routes/payments/stripeRoutes");
+const stripeCheckout = require('./routes/payments/stripeRoutes')
 
 const { profile } = require("console");
 
@@ -84,6 +85,7 @@ app.use("/", indexRoutes);
 app.use("/products", productRoutes);
 app.use("/paypal", paypalRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use('/stripe', stripeCheckout)
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
