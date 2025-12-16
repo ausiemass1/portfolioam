@@ -1,4 +1,4 @@
-const paypal = require("../helpers/paypal");
+const paypal = require("../../helpers/paypal");
 
 // initiating payment
 exports.paymentSuccess = async (req, res) => {

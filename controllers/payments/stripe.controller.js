@@ -46,7 +46,7 @@ exports.stripeCancel = (req, res) => {
   res.redirect("/checkout");
 };
 
-// stripe wbhook
+// stripe wbhook, this is where the order is saved to dataabase
 exports.stripeWebhook = async (req, res) => {
   const signature = req.headers["stripe-signature"];
   let event;

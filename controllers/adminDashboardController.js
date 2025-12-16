@@ -12,14 +12,14 @@ exports.adminDashboard = async (req, res) => {
           user: req.user,
           layout: 'admin/layout',
 
-            // Add these so EJS never breaks
+            // Avoiding EJS from breaking
             search: req.query.search || "",
             category: req.query.category || "",
             selectedSize: req.query.size || "",
             minPrice: req.query.minPrice || "",
             maxPrice: req.query.maxPrice || "",
 
-            // Later you will pass categories & sizes
+            // pass categories & sizes
             categories: [],
             sizes: [],
         });

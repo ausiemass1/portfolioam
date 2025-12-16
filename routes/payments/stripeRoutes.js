@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const stripe = require("../../config/stripe");
-const stripePaymentsController = require('../../controllers/payments/stripe.payments.controller')
+const stripeController = require('../../controllers/payments/stripe.controller')
 router.post("/create-payment-intent", async (req, res) => {
   try {
     const { amount } = req.body;
@@ -23,10 +23,10 @@ router.post("/create-payment-intent", async (req, res) => {
   }
 });
 
-router.get("/checkout", stripePaymentsController.stripeCheckout);
-router.post("/checkout", stripePaymentsController.stripeCheckoutSessionCreate);
-router.get("/success", stripePaymentsController.stripeSuccess);
-router.get("/cancel", stripePaymentsController.stripeCancel);
-router.post("/webhook", express.raw({type: 'application/json'}), stripePaymentsController.stripeWebhook);
+router.get("/checkout", stripeController.stripeCheckout);
+router.post("/checkout", stripeController.stripeCheckoutSessionCreate);
+router.get("/success", stripeController.stripeSuccess);
+router.get("/cancel", stripeController.stripeCancel);
+router.post("/webhook", express.raw({type: 'application/json'}), stripeController.stripeWebhook);
 
 module.exports = router;
