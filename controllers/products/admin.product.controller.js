@@ -113,11 +113,12 @@ exports.displayProducts = async (req, res) => {
 exports.editProductForm = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-    const categories = await
-    res.render('admin/products/add', { 
-      title: "Add Product", 
-      categories,
+    const categories = await Category.find(); 
+    const sizes = await Size.find(); 
+    res.render('admin/products/edit', { 
+      title: "edit Product", 
       sizes,
+      categories,
       product,
       layout: 'admin/layout',
     });
@@ -130,26 +131,69 @@ exports.editProductForm = async (req, res) => {
 // Update product  (Update )
 exports.updateProduct = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
 
-    const { product_name, price } = req.body;
+    const {
+      name,
+      description,
+      price,
+      category
+    } = req.body;
 
-    const imagePath = req.file ? `/uploads/${req.file.filename}` : undefined;
-
-    const updateData = { product_name, price };
-
-    if (imagePath) {
-      updateData.image = imagePath;
+    // sizes can be string (1 checkbox) or array (many)
+    let sizes = req.body.sizes || [];
+    if (!Array.isArray(sizes)) {
+      sizes = [sizes];
     }
 
-    await Product.findByIdAndUpdate(id, updateData);
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).send("Product not found");
+    }
 
-    res.redirect('/products');
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Update failed");
+    const imageUrls = [];
+
+    // Upload new images to S3 ONLY if provided
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        const fileName = `products/${crypto
+          .randomBytes(16)
+          .toString("hex")}${path.extname(file.originalname)}`;
+
+        const params = {
+          Bucket: process.env.AWS_S3_BUCKET,
+          Key: fileName,
+          Body: file.buffer,
+          ContentType: file.mimetype
+        };
+
+        await s3.send(new PutObjectCommand(params));
+
+        imageUrls.push(
+          `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`
+        );
+      }
+
+      // Replace images only if new ones uploaded
+      product.images = imageUrls;
+    }
+
+    // Update scalar fields
+    product.name = name;
+    product.description = description;
+    product.price = price;
+    product.category = category;
+    product.sizes = sizes;
+
+    await product.save();
+
+    res.redirect("/admin/products");
+  } catch (error) {
+    console.error("Error updating product:", error);
+    res.status(500).send("Error updating product");
   }
 };
+
 
 // delete a product  (Delete)
 exports.deleteProduct = async (req, res) => {
@@ -157,7 +201,7 @@ exports.deleteProduct = async (req, res) => {
     const productId = req.params.id;  // Get the product ID from the URL
     await Product.findByIdAndDelete(productId); // Delete the product from the DB
 
-    res.redirect('/products'); // After deleting, go back to the product list page
+    res.redirect('/admin/products'); // After deleting, go back to the product list page
   } catch (error) {
     console.error(error);
     res.status(500).send('Error deleting product');

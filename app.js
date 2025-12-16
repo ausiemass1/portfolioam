@@ -12,11 +12,11 @@ const session = require("express-session");
 const flash = require("connect-flash");
 
 // custom imports
-const userRoutes = require("./routes/usersRoutes");
-const indexRoutes = require("./routes/indexRoutes");
+const userRoutes = require("./routes/admin/users.routes");
+const siteRoutes = require("./routes/site/site.routes");
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/auth/authRoutes");
-const adminRoutes = require("./routes/products/admin.products.routes");
+const adminRoutes = require("./routes/admin/admin.routes");
 const paypalRoutes = require("./routes/payments/paypalRoutes");
 const paypal = require("./helpers/paypal");
 const connectDB = require("./config/db");
@@ -81,7 +81,7 @@ app.use(refreshToken);
 // --------------------
 app.use("/users", userRoutes);
 app.use("/admin", adminRoutes);
-app.use("/", indexRoutes);
+app.use("/", siteRoutes);
 app.use("/products", productRoutes);
 app.use("/paypal", paypalRoutes);
 app.use("/api/payments", paymentRoutes);
