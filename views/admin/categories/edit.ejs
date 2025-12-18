@@ -1,0 +1,92 @@
+<div class="container">
+    <h4>Update Category</h4>
+  
+    <form action="/admin/categories/edit/<%= category._id %>" method="POST">
+  
+      <!-- Name -->
+      <div class="input-field">
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value="<%= category.name %>"
+          required
+        />
+        <label for="name" class="active">Category Name</label>
+      </div>
+      
+  
+      <!-- Description -->
+      <div class="input-field">
+        <textarea
+          id="description"
+          name="description"
+          class="materialize-textarea"
+        ><%= category.description || "" %></textarea>
+        <label class="active">Description</label>
+      </div>
+  
+      <!-- Gender -->
+      <div class="input-field">
+        <label class="active">Gender</label>
+        <select name="gender">
+          <option value="unisex" <%= category.gender === "unisex" ? "selected" : "" %>>Unisex</option>
+          <option value="men" <%= category.gender === "men" ? "selected" : "" %>>Men</option>
+          <option value="women" <%= category.gender === "women" ? "selected" : "" %>>Women</option>
+          <option value="kids" <%= category.gender === "kids" ? "selected" : "" %>>Kids</option>
+        </select>
+      </div>
+  
+      <!-- Type -->
+      <div class="input-field">
+        <label class="active">Category Type</label>
+        <select name="type" required>
+          <option value="sneakers" <%= category.type === "sneakers" ? "selected" : "" %>>Sneakers</option>
+          <option value="boots" <%= category.type === "boots" ? "selected" : "" %>>Boots</option>
+          <option value="sandals" <%= category.type === "sandals" ? "selected" : "" %>>Sandals</option>
+          <option value="heels" <%= category.type === "heels" ? "selected" : "" %>>Heels</option>
+          <option value="formal" <%= category.type === "formal" ? "selected" : "" %>>Formal</option>
+          <option value="sports" <%= category.type === "sports" ? "selected" : "" %>>Sports</option>
+          <option value="slippers" <%= category.type === "slippers" ? "selected" : "" %>>Slippers</option>
+        </select>
+      </div>
+  
+      <!-- Image -->
+      <div class="input-field">
+        <input
+          type="text"
+          name="image"
+          value="<%= category.image || "" %>"
+        />
+        <label class="active">Image URL</label>
+      </div>
+  
+      <!-- Active -->
+      <div class="input-field">
+        <label>
+          <input
+            type="checkbox"
+            name="isActive"
+            <%= category.isActive ? "checked" : "" %>
+          />
+          <span>Active</span>
+        </label>
+      </div>
+  
+      <button class="btn green waves-effect">
+        Update Category
+      </button>
+  
+    </form>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      M.updateTextFields();
+      M.textareaAutoResize(document.querySelector('#description'));
+      M.FormSelect.init(document.querySelectorAll('select'));
+    });
+  </script>
+  
+  
+ 
+  

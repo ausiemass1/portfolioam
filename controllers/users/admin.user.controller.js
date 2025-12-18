@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 // Display all users
 exports.getUsers = async (req, res) => {
   const users = await User.find();
-  res.render('admin/users/users', { title: 'User List', users });
+  res.render('admin/users/users', { title: 'User List', users, layout: 'admin/layout', });
 };
 
 // Seed database
@@ -105,7 +105,7 @@ exports.deleteUser = async (req, res) => {
 exports.editUserForm = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    res.render('admin/users/updateUser', { title: "Edit User", user });
+    res.render('admin/users/updateUser', { title: "Edit User", user, layout: 'admin/layout', });
   } catch (error) {
     console.error(error);
     res.status(500).send("Error loading edit form");
@@ -125,7 +125,7 @@ exports.updateUser = async (req, res) => {
       password: req.body.password
     });
 
-    res.redirect('/users');
+    res.redirect('/admin/users');
   } catch (err) {
     console.error(err);
     res.status(500).send("Update failed");

@@ -1,22 +1,81 @@
-<%- include('../layout') %>
-
-<div class="row">
+<div class="container">
+  <div class="row valign-wrapper">
     <div class="col s6">
-        <h4>Categories</h4>
+      <h4>Category List</h4>
     </div>
+
     <div class="col s6 right-align">
-        <a href="/admin/categories/new" class="btn blue">Add Category</a>
+      <a href="/admin/categories/addcategory" class="btn green waves-effect">
+        <i class="material-icons left">add</i>
+        Add Category
+      </a>
     </div>
-</div>
-
-<ul class="collection">
-    <% categories.forEach(cat => { %>
-        <li class="collection-item">
-            <%= cat.name %>
-
-            <form action="/admin/categories/<%= cat._id %>/delete" method="POST" class="secondary-content">
-                <button class="btn-small red">Delete</button>
-            </form>
-        </li>
-    <% }) %>
-</ul>
+  </div>
+  
+    <% if (categories.length === 0) { %>
+      <p>No categories found.</p>
+    <% } else { %>
+  
+      <table class="striped highlight responsive-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Type</th>
+            <th>Slug</th>
+            <th>Status</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+  
+        <tbody>
+          <% categories.forEach(category => { %>
+            <tr>
+              <td><%= category.name %></td>
+  
+              <td class="capitalize">
+                <%= category.gender %>
+              </td>
+  
+              <td class="capitalize">
+                <%= category.type %>
+              </td>
+  
+              <td class="grey-text">
+                <%= category.slug %>
+              </td>
+  
+              <td>
+                <% if (category.isActive) { %>
+                  <span class="new badge green" data-badge-caption="Active"></span>
+                <% } else { %>
+                  <span class="new badge red" data-badge-caption="Inactive"></span>
+                <% } %>
+              </td>
+  
+              <!-- Edit -->
+              <td>
+                <a href="/admin/categories/edit/<%= category._id %>">
+                  <span class="material-icons blue-text">edit</span>
+                </a>
+              </td>
+  
+              <!-- Delete -->
+              <td>
+                <a
+                  href="/admin/categories/delete/<%= category._id %>"
+                  onclick="return confirm('Delete this category?')"
+                >
+                  <span class="material-icons red-text">delete</span>
+                </a>
+              </td>
+  
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+  
+    <% } %>
+  </div>
+  

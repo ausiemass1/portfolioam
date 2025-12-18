@@ -11,7 +11,7 @@ router.get("/dashboard", adminDashboadController.adminDashboard);
 router.get("/", adminProductController.displayProducts);
 router.get("/addproduct", adminProductController.addProductform);
 router.get("/:id/edit", adminProductController.editProductForm);
-router.post("/:id/delete", adminProductController.deleteProduct);
+router.get("/:id/delete", adminProductController.deleteProduct);
 
 router.post("/addproduct", upload.array("images", 5), adminProductController.addProduct);
 router.post("/:id", upload.array("images", 5), adminProductController.updateProduct);
