@@ -1,17 +1,21 @@
 const categoryModel = require("../../models/CategoryModel");
 const Category = require("../../models/CategoryModel");
 const Size = require("../../models/sizesModel");
-
-const slugify = require("slugify");
+const slugify = require("slugify"); // helps in search engine optimaisation SEO
 
 // list all the categories
 exports.displayCategories = async (req, res) => {
-    const categories = await categoryModel.find();
-  res.render("admin/categories/list", {
-    title: "Add Category",
-    categories,
-    layout: "admin/layout",
-  });
+  const categories = await categoryModel.find();
+  try {
+    res.render("admin/categories/list", {
+      title: "Add Category",
+      categories,
+      layout: "admin/layout",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Failed to load categories");
+  }
 };
 
 // add category to database
