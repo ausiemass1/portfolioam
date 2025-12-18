@@ -40,11 +40,12 @@
             <td>$<%= p.price %></td>
 
             <td>
-                <a href="/admin/products/<%= p._id %>/edit" class="btn-small orange">Edit</a>
+                <a href="/admin/products/<%= p._id %>/edit" class="btn-small orange" onclick="return confirm('Delete this category?')">Edit</a>
+                <a href="/admin/products/<%= p._id %>/delete" class="btn-small red" onclick="return confirm('Delete this category?')">Delete</a>
 
-                <form method="POST" action="/admin/products/<%= p._id %>/delete" style="display:inline;">
+                <!-- <form method="POST" action="/admin/products/<%= p._id %>/delete" style="display:inline;">
                     <button class="btn-small red">Delete</button>
-                </form>
+                </form> -->
             </td>
         </tr>
         <% }) %>
