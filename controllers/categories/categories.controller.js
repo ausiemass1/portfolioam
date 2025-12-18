@@ -2,7 +2,7 @@ const categoryModel = require('../../models/CategoryModel');
 const Category = require('../../models/CategoryModel');
 const Size = require('../../models/sizesModel');
 
-
+const slugify = require("slugify");
 
 
 exports.addCategory = async (req, res) => {
@@ -33,7 +33,7 @@ exports.addCategory = async (req, res) => {
       isActive: isActive === "on"
     });
 
-    res.redirect("/admin/categories");
+    res.redirect("/admin/categories/addcategory");
 
   } catch (error) {
     console.error(error);

@@ -8,6 +8,7 @@ const requireAdmin = require('../../middleware/admin.middleware');
 // Sub-routers
 const userRoutes = require('./users.routes');
 const productRoutes = require('./products.routes');
+const categoryRoutes = require('./category.routes');
 
 /**
  * Apply auth + admin check to ALL admin routes
@@ -22,5 +23,6 @@ router.get('/dashboard', adminDashboardController.adminDashboard);
 
 router.use('/users', userRoutes);
 router.use('/products', productRoutes);
+router.use('/categories', categoryRoutes);
 
 module.exports = router;

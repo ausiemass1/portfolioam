@@ -83,8 +83,6 @@ app.use(refreshToken);
 app.use("/users", userRoutes);
 app.use("/admin", adminRoutes);
 app.use("/", siteRoutes);
-app.use("/products", productRoutes);
-app.use("/category", categoryRoutes);
 app.use("/paypal", paypalRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use('/stripe', stripeCheckout)
