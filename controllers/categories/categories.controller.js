@@ -69,3 +69,73 @@ exports.addCategoryForm = async (req, res) => {
     res.status(500).send("Error loading edit form");
   }
 };
+
+
+//get update category form
+exports.updateCategoryForm = async (req, res) => {
+  try {
+    const category = await Category.findById(req.params.id);
+
+    if (!category) {
+      return res.status(404).send("Category not found");
+    }
+
+    res.render("admin/categories/edit", {
+      title: "Update Category",
+      category,
+      layout: "admin/layout",
+    });
+  } catch (error) {
+    console.error("Error loading category:", error);
+    res.status(500).send("Server error");
+  }
+};
+
+
+// Save the updated category
+exports.updateCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const {
+      name,
+      description,
+      gender,
+      type,
+      image,
+      isActive
+    } = req.body;
+
+    // Basic validation
+    if (!name || !type) {
+      return res.status(400).send("Name and type are required");
+    }
+
+    await Category.findByIdAndUpdate(
+      id,
+      {
+        name,
+        slug: slugify(name, { lower: true }),
+        description,
+        gender,
+        type,
+        image,
+        isActive: isActive === "on"
+      },
+      { new: true, runValidators: true }
+    );
+
+    res.redirect("/admin/categories");
+
+  } catch (error) {
+    console.error("Update category error:", error);
+
+    // Handle duplicate slug/name
+    if (error.code === 11000) {
+      return res.status(400).send("Category with this name already exists");
+    }
+
+    res.status(500).send("Failed to update category");
+  }
+};
+
