@@ -1,0 +1,85 @@
+<div class="container">
+    <h1>Update Category</h1>
+    
+    <form action="/admin/categories/addcategory" method="POST" class="form">
+    
+      <!-- Category Name -->
+      <div class="form-group">
+        <label for="name">Category Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="e.g. Sneakers"
+          <%-  categories.name %>
+          required
+        />
+      </div>
+    
+      <!-- Description -->
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea
+          id="description"
+          name="description"
+          rows="4"
+          placeholder="Optional description"
+          
+        > <%-  categories.description %></textarea>
+      </div>
+    
+      <!-- Gender -->
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <select id="gender" name="gender">
+            <option value="<%-  categories.gender %>" selected><%-  categories.gender %></option>
+          <option value="unisex" >Unisex</option>
+          <option value="men">Men</option>
+          <option value="women">Women</option>
+          <option value="kids">Kids</option>
+        </select>
+      </div>
+    
+      <!-- Type -->
+      <div class="form-group">
+        <label for="type">Category Type</label>
+        <select id="type" name="type" required>
+          <option value=""><%-  categories.type %> </option>
+          <option value="sneakers">Sneakers</option>
+          <option value="boots">Boots</option>
+          <option value="sandals">Sandals</option>
+          <option value="heels">Heels</option>
+          <option value="formal">Formal</option>
+          <option value="sports">Sports</option>
+          <option value="slippers">Slippers</option>
+        </select>
+      </div>
+    
+      <!-- Image URL -->
+      <div class="form-group">
+        <label for="image">Image URL</label>
+        <input
+          type="text"
+          id="image"
+          name="image"
+          placeholder="/images/category-placeholder.png"
+        />
+      </div>
+    
+      <!-- Active -->
+      <div class="input-field">
+        <p>
+          <label>
+            <input type="checkbox" name="isActive" checked />
+            <span>Active</span>
+          </label>
+        </p>
+      </div>
+      
+      <!-- Submit -->
+      <button type="submit" class="btn">Update Category</button>
+      <br><br><br>
+    
+    </form>
+    </div>
+    
