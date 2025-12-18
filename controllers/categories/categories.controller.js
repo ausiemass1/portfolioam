@@ -139,3 +139,18 @@ exports.updateCategory = async (req, res) => {
   }
 };
 
+// Delete category
+exports.deleteCategory = async (req, res) => {
+  try {
+    const categoryId = req.params.id; // Get category ID from URL
+
+    await Category.findByIdAndDelete(categoryId); // Delete from MongoDB
+
+    res.redirect("/admin/categories"); // Go back to category list
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error deleting category");
+  }
+};
+
+
