@@ -1,30 +1,43 @@
-require("dotenv").config();
-// Import dependencies
-const express = require("express");
+import "./config/env.js";
+
+// Core dependencies
+import express from "express";
+import expressLayouts from "express-ejs-layouts";
+import path from "path";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import flash from "connect-flash";
+
+// Middleware
+import refreshToken from "./middleware/refreshToken.js";
+import auth from "./middleware/auth.js";
+
+// Passport
+import passport from "./config/passport.js";
+
+// Custom imports
+import userRoutes from "./routes/admin/users.routes.js";
+import siteRoutes from "./routes/site/site.routes.js";
+import productRoutes from "./routes/productRoutes.js";
+import authRoutes from "./routes/auth/authRoutes.js";
+import adminRoutes from "./routes/admin/admin.routes.js";
+import paypalRoutes from "./routes/payments/paypalRoutes.js";
+import paymentRoutes from "./routes/payments/stripeRoutes.js";
+import stripeCheckout from "./routes/payments/stripeRoutes.js";
+import categoryRoutes from "./routes/admin/category.routes.js";
+
+// Helpers & config
+
+import connectDB from "./config/db.js";
+
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// App init
 const app = express();
-const expressLayouts = require("express-ejs-layouts");
-const path = require("path");
-const cookieParser = require("cookie-parser");
-const refreshToken = require("./middleware/refreshToken");
-const auth = require("./middleware/auth");
-const passport = require("./config/passort");
-const session = require("express-session");
-const flash = require("connect-flash");
 
-// custom imports
-const userRoutes = require("./routes/admin/users.routes");
-const siteRoutes = require("./routes/site/site.routes");
-const productRoutes = require("./routes/productRoutes");
-const authRoutes = require("./routes/auth/authRoutes");
-const adminRoutes = require("./routes/admin/admin.routes");
-const paypalRoutes = require("./routes/payments/paypalRoutes");
-const paypal = require("./helpers/paypal");
-const connectDB = require("./config/db");
-const paymentRoutes =require("./routes/payments/stripeRoutes");
-const stripeCheckout = require('./routes/payments/stripeRoutes');
-const categoryRoutes = require('./routes/admin/category.routes')
-
-const { profile } = require("console");
 
 app.use(
   session({

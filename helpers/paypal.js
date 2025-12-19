@@ -1,6 +1,4 @@
-const axios = require("axios");
-const auth = require("../middleware/auth");
-const { application, json } = require("express");
+import axios from "axios";
 
 // step 1 : generate accessToken
 async function getAccessToken() {
@@ -86,7 +84,7 @@ async function capturePayment(orderID) {
   return response.data;
 }
 
-module.exports = {
+export default {
   getAccessToken,
   createOrder,
   capturePayment,

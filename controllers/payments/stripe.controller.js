@@ -1,12 +1,12 @@
-const stripe = require("../../config/stripe");
-const Order = require("../../models/orderModel");
+import stripe from "../../config/stripe.js";
+import Order from"../../models/orderModel.js";
 
-exports.stripeCheckout = (req, res) => {
+const stripeCheckout = (req, res) => {
   res.render("pages/checkout", { title: "checkout" });
 };
 
 // creating a checkout session
-exports.stripeCheckoutSessionCreate = async (req, res) => {
+const stripeCheckoutSessionCreate = async (req, res) => {
   try {
     const session = await stripe.checkout.sessions.create({
       line_items: [
@@ -37,17 +37,17 @@ exports.stripeCheckoutSessionCreate = async (req, res) => {
 };
 
 // stripe success route which also save to database
-exports.stripeSuccess = async (req, res) => {
+const stripeSuccess = async (req, res) => {
   res.redirect("/");
 };
 
 //Stripe cancel route, when the custoer decides to cancel the payment
-exports.stripeCancel = (req, res) => {
+const stripeCancel = (req, res) => {
   res.redirect("/checkout");
 };
 
 // stripe wbhook, this is where the order is saved to dataabase
-exports.stripeWebhook = async (req, res) => {
+const stripeWebhook = async (req, res) => {
   const signature = req.headers["stripe-signature"];
   let event;
 
@@ -133,3 +133,12 @@ exports.stripeWebhook = async (req, res) => {
   // ✅ Always acknowledge receipt
   res.sendStatus(200);
 };
+
+export default {
+  stripeCheckout,
+  stripeCheckoutSessionCreate,
+  stripeCancel,
+  stripeSuccess,
+  stripeWebhook
+
+}

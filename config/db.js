@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-module.exports = async () => {
+const connectDB = async () => {
   const dbURL = process.env.DATABASE.replace(
     "<PASSWORD>",
     process.env.DATABASE_PASSWORD
@@ -14,3 +14,6 @@ module.exports = async () => {
     process.exit(1);
   }
 };
+
+export default connectDB;
+

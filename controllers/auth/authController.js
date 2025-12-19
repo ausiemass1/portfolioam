@@ -1,13 +1,11 @@
-// controllers/authController.js
-
 
 //login successful
-exports.loginSuccess = (req, res) => {
+const loginSuccess  = (req, res) => {
     res.redirect("/admin/dashboard");
   };
 
   // Logout
-  exports.logout = (req, res) => {
+  const logout = (req, res) => {
     // Passport logout
     req.logout(function(err) {
       if (err) {
@@ -29,3 +27,7 @@ exports.loginSuccess = (req, res) => {
     });
   };
   
+  export default {
+    loginSuccess,
+    logout
+  }

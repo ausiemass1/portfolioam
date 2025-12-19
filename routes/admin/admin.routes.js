@@ -1,28 +1,23 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
-// Admin access middleware
-const requireAuth = require('../../middleware/auth.middleware');
-const requireAdmin = require('../../middleware/admin.middleware');
+import requireAuth from '../../middleware/auth.middleware.js';
+import requireAdmin from '../../middleware/admin.middleware.js';
 
-// Sub-routers
-const userRoutes = require('./users.routes');
-const productRoutes = require('./products.routes');
-const categoryRoutes = require('./category.routes');
-
+import userRoutes from './users.routes.js';
+import productRoutes from './products.routes.js';
+import categoryRoutes from './category.routes.js';
+import adminDashboardController from '../../controllers/adminDashboardController.js';
 /**
  * Apply auth + admin check to ALL admin routes
  */
 // router.use(requireAuth);
 // router.use(requireAdmin);
 
-const adminDashboardController = require('../../controllers/adminDashboardController');
-
 // GET /admin/dashboard
 router.get('/dashboard', adminDashboardController.adminDashboard);
-
 router.use('/users', userRoutes);
 router.use('/products', productRoutes);
 router.use('/categories', categoryRoutes);
 
-module.exports = router;
+export default router;

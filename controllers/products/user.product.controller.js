@@ -1,9 +1,9 @@
-const Product = require("../../models/productsModel");
+import Product from "../../models/productsModel.js";
 
 // display all products  (Read from Database)
-exports.displayProducts = async (req, res) => {
+const displayProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find().populate("category");
 
     res.render("pages/index", {
       title: "product",
@@ -15,3 +15,7 @@ exports.displayProducts = async (req, res) => {
     res.status(500).send("Error retrieving products");
   }
 };
+
+export default {
+  displayProducts,
+}

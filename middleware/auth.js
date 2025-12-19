@@ -1,6 +1,6 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
-module.exports = function (req, res, next) {
+const auth = (req, res, next) => {
   // If user is logged in with Google OAuth (Passport session)
   if (req.user) {
     return next();
@@ -21,3 +21,5 @@ module.exports = function (req, res, next) {
     return res.redirect("/login");
   }
 };
+
+export default auth;

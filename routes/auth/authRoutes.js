@@ -1,8 +1,9 @@
-const express = require("express");
+import express from "express";
+import authController from "../../controllers/auth/authController.js";
+import googleAuth from "../../middleware/googleAuth.js";
+import passport from "passport";
+
 const router = express.Router();
-const authController = require("../../controllers/auth/authController");
-const googleAuth = require("../../middleware/googleAuth");
-const passport = require("passport");
 
 //redirect to google
 router.get("/google", googleAuth.googleLogin);
@@ -30,4 +31,4 @@ router.get(
 
 // Logout route
 router.get("/logout", authController.logout);
-module.exports = router;
+export default router;

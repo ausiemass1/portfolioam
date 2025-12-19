@@ -1,10 +1,14 @@
-const Products = require("../../models/productsModel");
+import Products from "../../models/productsModel.js";
 
-exports.home = async (req, res) => {
+const home = async (req, res) => {
     const products = await Products.find();
     res.render("pages/index", {
       title: "Home Page",
       products,
       user: req.user || null,
     });
+  }
+
+  export default{
+ home,
   }

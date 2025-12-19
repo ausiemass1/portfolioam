@@ -1,9 +1,9 @@
-const User = require('../../models/User');
-const bcrypt = require('bcrypt')
-const jwt = require("jsonwebtoken");
+import User from '../../models/User.js';
+import bcrypt from 'bcrypt';
+import jwt from "jsonwebtoken";
 
 // Handle registration form submission
-exports.registerUser = async (req, res) => {
+const registerUser = async (req, res) => {
     try {
         const { name, age, email, password } = req.body;
 
@@ -37,6 +37,11 @@ exports.registerUser = async (req, res) => {
     }
 };
 // register page
-exports.getRegisterForm = (req, res) => {
+const getRegisterForm = (req, res) => {
     res.render("pages/register", { title: "register" });
   };
+
+  export default{
+ registerUser,
+ getRegisterForm,
+  }

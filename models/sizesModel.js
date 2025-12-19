@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const sizeSchema = new mongoose.Schema(
   {
@@ -43,5 +43,7 @@ const sizeSchema = new mongoose.Schema(
 );
 
 // Prevent model overwrite
-module.exports =
+const Size =
   mongoose.models.Size || mongoose.model("Size", sizeSchema);
+
+  export default Size;

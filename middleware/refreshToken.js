@@ -1,4 +1,5 @@
-module.exports = function (req, res, next) {
+// middleware/refreshToken.js
+export default function refreshToken(req, res, next) {
   // Only refresh JWT for JWT users, not Google OAuth
   if (req.cookies.token) {
     res.cookie("token", req.cookies.token, {
@@ -7,4 +8,4 @@ module.exports = function (req, res, next) {
     });
   }
   next();
-};
+}
