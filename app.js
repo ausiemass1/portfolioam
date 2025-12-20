@@ -7,37 +7,21 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import flash from "connect-flash";
-
-// Middleware
 import refreshToken from "./middleware/refreshToken.js";
-import auth from "./middleware/auth.js";
-
-// Passport
 import passport from "./config/passport.js";
-
-// Custom imports
 import userRoutes from "./routes/admin/users.routes.js";
 import siteRoutes from "./routes/site/site.routes.js";
-import productRoutes from "./routes/productRoutes.js";
 import authRoutes from "./routes/auth/authRoutes.js";
 import adminRoutes from "./routes/admin/admin.routes.js";
 import paypalRoutes from "./routes/payments/paypalRoutes.js";
 import paymentRoutes from "./routes/payments/stripeRoutes.js";
 import stripeCheckout from "./routes/payments/stripeRoutes.js";
-import categoryRoutes from "./routes/admin/category.routes.js";
-
-// Helpers & config
-
 import connectDB from "./config/db.js";
-
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-// App init
 const app = express();
-
 
 app.use(
   session({
@@ -75,7 +59,6 @@ app.set("layout", "./layout"); // This tells Express to use views/layout.ejs as 
 // Parse form data (optional)
 app.use(cookieParser());
 
-
 // Serve static files (CSS, JS, images) from /public
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -98,11 +81,10 @@ app.use("/admin", adminRoutes);
 app.use("/", siteRoutes);
 app.use("/paypal", paypalRoutes);
 app.use("/api/payments", paymentRoutes);
-app.use('/stripe', stripeCheckout)
+app.use("/stripe", stripeCheckout);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
 
 // --------------------
 // START SERVER

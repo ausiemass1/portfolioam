@@ -1,9 +1,8 @@
-import Category from "../../models/CategoryModel.js"
+import Category from "../../models/CategoryModel.js";
 import slugify from "slugify"; // helps in search engine optimaisation SEO
 
 // list all the categories
 const displayCategories = async (req, res) => {
- 
   try {
     const categories = await Category.find();
     res.render("admin/categories/list", {
@@ -28,8 +27,7 @@ const addCategory = async (req, res) => {
         error: "Name and category type are required",
       });
     }
-
-    const category = await Category.create({
+    await Category.create({
       name,
       slug: slugify(name, { lower: true }),
       description,
@@ -69,7 +67,6 @@ const addCategoryForm = async (req, res) => {
   }
 };
 
-
 //get update category form
 const updateCategoryForm = async (req, res) => {
   try {
@@ -90,20 +87,12 @@ const updateCategoryForm = async (req, res) => {
   }
 };
 
-
 // Save the updated category
 const updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const {
-      name,
-      description,
-      gender,
-      type,
-      image,
-      isActive
-    } = req.body;
+    const { name, description, gender, type, image, isActive } = req.body;
 
     // Basic validation
     if (!name || !type) {
@@ -119,13 +108,12 @@ const updateCategory = async (req, res) => {
         gender,
         type,
         image,
-        isActive: isActive === "on"
+        isActive: isActive === "on",
       },
       { new: true, runValidators: true }
     );
 
     res.redirect("/admin/categories");
-
   } catch (error) {
     console.error("Update category error:", error);
 
@@ -152,13 +140,11 @@ const deleteCategory = async (req, res) => {
   }
 };
 
-
-export  default {
+export default {
   displayCategories,
   addCategory,
   addCategoryForm,
   updateCategory,
   updateCategoryForm,
   deleteCategory,
-}
-
+};

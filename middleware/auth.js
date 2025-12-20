@@ -18,6 +18,7 @@ const auth = (req, res, next) => {
     req.user = verified;
     next();
   } catch (err) {
+    console.log(err)
     return res.redirect("/login");
   }
 };

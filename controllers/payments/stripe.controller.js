@@ -124,8 +124,6 @@ const stripeWebhook = async (req, res) => {
         break;
       }
 
-      charge.updated;
-
     default:
       console.log(`Ignoring event type: ${event.type}`);
   }
