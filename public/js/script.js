@@ -8,3 +8,4 @@ $(document).ready(function () {
   // Initialize the dropdown
   $(".dropdown-trigger").dropdown();
 });
+
