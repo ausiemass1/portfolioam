@@ -1,12 +1,10 @@
-const categoryModel = require("../../models/CategoryModel");
-const Category = require("../../models/CategoryModel");
-const Size = require("../../models/sizesModel");
-const slugify = require("slugify"); // helps in search engine optimaisation SEO
+import Category from "../../models/CategoryModel.js";
+import slugify from "slugify"; // helps in search engine optimaisation SEO
 
 // list all the categories
-exports.displayCategories = async (req, res) => {
-  const categories = await categoryModel.find();
+const displayCategories = async (req, res) => {
   try {
+    const categories = await Category.find();
     res.render("admin/categories/list", {
       title: "Add Category",
       categories,
@@ -19,7 +17,7 @@ exports.displayCategories = async (req, res) => {
 };
 
 // add category to database
-exports.addCategory = async (req, res) => {
+const addCategory = async (req, res) => {
   try {
     const { name, description, gender, type, image, isActive } = req.body;
 
@@ -29,8 +27,7 @@ exports.addCategory = async (req, res) => {
         error: "Name and category type are required",
       });
     }
-
-    const category = await Category.create({
+    await Category.create({
       name,
       slug: slugify(name, { lower: true }),
       description,
@@ -58,7 +55,7 @@ exports.addCategory = async (req, res) => {
 };
 
 //add category form
-exports.addCategoryForm = async (req, res) => {
+const addCategoryForm = async (req, res) => {
   try {
     res.render("admin/categories/add", {
       title: "Add Category",
@@ -70,9 +67,8 @@ exports.addCategoryForm = async (req, res) => {
   }
 };
 
-
 //get update category form
-exports.updateCategoryForm = async (req, res) => {
+const updateCategoryForm = async (req, res) => {
   try {
     const category = await Category.findById(req.params.id);
 
@@ -91,20 +87,12 @@ exports.updateCategoryForm = async (req, res) => {
   }
 };
 
-
 // Save the updated category
-exports.updateCategory = async (req, res) => {
+const updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const {
-      name,
-      description,
-      gender,
-      type,
-      image,
-      isActive
-    } = req.body;
+    const { name, description, gender, type, image, isActive } = req.body;
 
     // Basic validation
     if (!name || !type) {
@@ -120,13 +108,12 @@ exports.updateCategory = async (req, res) => {
         gender,
         type,
         image,
-        isActive: isActive === "on"
+        isActive: isActive === "on",
       },
       { new: true, runValidators: true }
     );
 
     res.redirect("/admin/categories");
-
   } catch (error) {
     console.error("Update category error:", error);
 
@@ -140,7 +127,7 @@ exports.updateCategory = async (req, res) => {
 };
 
 // Delete category
-exports.deleteCategory = async (req, res) => {
+const deleteCategory = async (req, res) => {
   try {
     const categoryId = req.params.id; // Get category ID from URL
 
@@ -153,4 +140,11 @@ exports.deleteCategory = async (req, res) => {
   }
 };
 
-
+export default {
+  displayCategories,
+  addCategory,
+  addCategoryForm,
+  updateCategory,
+  updateCategoryForm,
+  deleteCategory,
+};

@@ -1,8 +1,8 @@
-const Product = require('../models/productsModel')
+import Product from'../models/productsModel.js';
 
 
 
-exports.adminDashboard = async (req, res) => {
+const adminDashboard = async (req, res) => {
     try {
         const products = await Product.find(); // find all products
     
@@ -29,3 +29,6 @@ exports.adminDashboard = async (req, res) => {
       }
   };
 
+export default {
+  adminDashboard,
+}

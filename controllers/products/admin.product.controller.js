@@ -1,9 +1,9 @@
-const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
-const path = require("path");
-const crypto = require("crypto");
-const Product = require('../../models/productsModel')
-const Category = require('../../models/CategoryModel')
-const Size = require('../../models/sizesModel')
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import  path from "path";
+import  crypto from "crypto";
+import  Product from "../../models/productsModel.js";
+import  Category from "../../models/CategoryModel.js";
+import  Size from "../../models/sizesModel.js";
 
 // authenticating with S3
 const s3 = new S3Client({
@@ -15,7 +15,7 @@ const s3 = new S3Client({
 });
 //get product add form
 
-exports.addProductform = async (req, res) => {
+const addProductform = async (req, res) => {
   try {
     
     const categories = await Category.find();
@@ -34,7 +34,7 @@ exports.addProductform = async (req, res) => {
 }
 
 // uploading product to s3
-exports.addProduct = async (req, res) => {
+const addProduct = async (req, res) => {
   try {
     const {
       name,
@@ -90,13 +90,13 @@ exports.addProduct = async (req, res) => {
 };
 
 // display all products  (Read from Database)
-exports.displayProducts = async (req, res) => {
+const displayProducts = async (req, res) => {
   try {
     const products = await Product
     .find()
     .populate("category");
 
-    res.render("admin/Products/list", { 
+    res.render("admin/products/list", { 
       title: "product", 
       products,
       user: req.user,
@@ -110,7 +110,7 @@ exports.displayProducts = async (req, res) => {
 };
  
 // Show edit product form (Update)
-exports.editProductForm = async (req, res) => {
+const editProductForm = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     const categories = await Category.find(); 
@@ -129,7 +129,7 @@ exports.editProductForm = async (req, res) => {
 };
 
 // Update product  (Update )
-exports.updateProduct = async (req, res) => {
+const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -196,7 +196,7 @@ exports.updateProduct = async (req, res) => {
 
 
 // delete a product  (Delete)
-exports.deleteProduct = async (req, res) => {
+const deleteProduct = async (req, res) => {
   try {
     const productId = req.params.id;  // Get the product ID from the URL
     await Product.findByIdAndDelete(productId); // Delete the product from the DB
@@ -207,3 +207,12 @@ exports.deleteProduct = async (req, res) => {
     res.status(500).send('Error deleting product');
   }
 };
+
+export default {
+  addProduct,
+  addProductform,
+  displayProducts,
+  editProductForm,
+  updateProduct,
+  deleteProduct,
+}

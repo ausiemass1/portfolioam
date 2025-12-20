@@ -1,30 +1,27 @@
-require("dotenv").config();
-// Import dependencies
-const express = require("express");
+import "./config/env.js";
+
+// Core dependencies
+import express from "express";
+import expressLayouts from "express-ejs-layouts";
+import path from "path";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import flash from "connect-flash";
+import refreshToken from "./middleware/refreshToken.js";
+import passport from "./config/passport.js";
+import userRoutes from "./routes/admin/users.routes.js";
+import siteRoutes from "./routes/site/site.routes.js";
+import authRoutes from "./routes/auth/authRoutes.js";
+import adminRoutes from "./routes/admin/admin.routes.js";
+import paypalRoutes from "./routes/payments/paypalRoutes.js";
+import paymentRoutes from "./routes/payments/stripeRoutes.js";
+import stripeCheckout from "./routes/payments/stripeRoutes.js";
+import connectDB from "./config/db.js";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const app = express();
-const expressLayouts = require("express-ejs-layouts");
-const path = require("path");
-const cookieParser = require("cookie-parser");
-const refreshToken = require("./middleware/refreshToken");
-const auth = require("./middleware/auth");
-const passport = require("./config/passort");
-const session = require("express-session");
-const flash = require("connect-flash");
-
-// custom imports
-const userRoutes = require("./routes/admin/users.routes");
-const siteRoutes = require("./routes/site/site.routes");
-const productRoutes = require("./routes/productRoutes");
-const authRoutes = require("./routes/auth/authRoutes");
-const adminRoutes = require("./routes/admin/admin.routes");
-const paypalRoutes = require("./routes/payments/paypalRoutes");
-const paypal = require("./helpers/paypal");
-const connectDB = require("./config/db");
-const paymentRoutes =require("./routes/payments/stripeRoutes");
-const stripeCheckout = require('./routes/payments/stripeRoutes');
-const categoryRoutes = require('./routes/admin/category.routes')
-
-const { profile } = require("console");
 
 app.use(
   session({
@@ -62,7 +59,6 @@ app.set("layout", "./layout"); // This tells Express to use views/layout.ejs as 
 // Parse form data (optional)
 app.use(cookieParser());
 
-
 // Serve static files (CSS, JS, images) from /public
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -85,11 +81,10 @@ app.use("/admin", adminRoutes);
 app.use("/", siteRoutes);
 app.use("/paypal", paypalRoutes);
 app.use("/api/payments", paymentRoutes);
-app.use('/stripe', stripeCheckout)
+app.use("/stripe", stripeCheckout);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
 
 // --------------------
 // START SERVER

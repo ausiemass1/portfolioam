@@ -1,7 +1,8 @@
-const express = require('express');
+import express from "express";
+import userController from "../../controllers/users/admin.user.controller.js";
+
+
 const router = express.Router();
-const userController = require('../../controllers/users/admin.user.controller');
-const auth = require("../../middleware/auth");
 
 // Define routes
 router.get('/seed', userController.seedUsers);
@@ -14,4 +15,4 @@ router.post('/register', userController.registerUser);
 router.post('/login', userController.loginUser);
 router.post('/update/:id', userController.updateUser);
 
-module.exports = router;
+export default router;

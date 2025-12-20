@@ -1,5 +1,9 @@
+/* global Stripe, axios */
+
 // 1. Initialize Stripe using your publishable key
-const stripe = Stripe("pk_test_51ScC5bDnJPMwVKZWDxXorPMWcikNffP8CN2NyDlBtfGdow60xWxkOow5Mv3i8nNDvkDJyYXorTgSEDefmgQbFXEb005SoTci04");
+const stripe = Stripe(
+  "pk_test_51ScC5bDnJPMwVKZWDxXorPMWcikNffP8CN2NyDlBtfGdow60xWxkOow5Mv3i8nNDvkDJyYXorTgSEDefmgQbFXEb005SoTci04"
+);
 
 // 2. Create elements instance
 const elements = stripe.elements();
@@ -18,7 +22,7 @@ document.getElementById("payNow").addEventListener("click", async () => {
   try {
     // 1️⃣ Create PaymentIntent on the server
     const res = await axios.post("/api/payments/create-payment-intent", {
-      amount: 10000 // amount in cents ($100.00)
+      amount: 10000, // amount in cents ($100.00)
     });
 
     const clientSecret = res.data.clientSecret;
@@ -31,8 +35,8 @@ document.getElementById("payNow").addEventListener("click", async () => {
     // 2️⃣ Confirm payment on the client side
     const result = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
-        card: cardElement
-      }
+        card: cardElement,
+      },
     });
 
     // 3️⃣ Handle result
@@ -45,14 +49,13 @@ document.getElementById("payNow").addEventListener("click", async () => {
       console.log(result);
       alert("Unexpected payment status. Please contact support.");
     }
-
   } catch (err) {
-      // Better user message with helpful detail for devs
-  const message =
-  err?.response?.data?.error ||
-  err?.message ||
-  (typeof err === "string" ? err : "Unknown error");
+    // Better user message with helpful detail for devs
+    const message =
+      err?.response?.data?.error ||
+      err?.message ||
+      (typeof err === "string" ? err : "Unknown error");
 
-alert("Error: " + message);
+    alert("Error: " + message);
   }
 });

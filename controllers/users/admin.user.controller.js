@@ -1,15 +1,15 @@
-const User = require('../../models/User');
-const bcrypt = require('bcrypt')
-const jwt = require("jsonwebtoken");
+import User from '../../models/User.js';
+import bcrypt from 'bcrypt';
+import jwt from "jsonwebtoken";
 
 // Display all users
-exports.getUsers = async (req, res) => {
+const getUsers = async (req, res) => {
   const users = await User.find();
   res.render('admin/users/users', { title: 'User List', users, layout: 'admin/layout', });
 };
 
-// Seed database
-exports.seedUsers = async (req, res) => {
+// Seed database wit users for testing
+const seedUsers = async (req, res) => {
   await User.insertMany([
     { name: 'Alice', age: 25, email: 'alice@example.com' },
     { name: 'Bob', age: 30, email: 'bob@example.com' },
@@ -19,7 +19,7 @@ exports.seedUsers = async (req, res) => {
 };
 
 // Handle registration form submission
-exports.registerUser = async (req, res) => {
+const registerUser = async (req, res) => {
     try {
         const { name, age, email, password } = req.body;
 
@@ -54,7 +54,7 @@ exports.registerUser = async (req, res) => {
 };
 
 // Handle login users
-exports.loginUser = async (req, res) => {
+const loginUser = async (req, res) => {
   try {
       const { email, password } = req.body;
 
@@ -89,7 +89,7 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-exports.deleteUser = async (req, res) => {
+const deleteUser = async (req, res) => {
   try {
     const userId = req.params.id;  // Get the user ID from the URL
     await User.findByIdAndDelete(userId); // Delete the user from the DB
@@ -102,7 +102,7 @@ exports.deleteUser = async (req, res) => {
 };
 
 // Show the edit form
-exports.editUserForm = async (req, res) => {
+const editUserForm = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     res.render('admin/users/updateUser', { title: "Edit User", user, layout: 'admin/layout', });
@@ -113,7 +113,7 @@ exports.editUserForm = async (req, res) => {
 };
 
 //Update the form
-exports.updateUser = async (req, res) => {
+const updateUser = async (req, res) => {
   try {
     const id = req.params.id;
 
@@ -133,7 +133,7 @@ exports.updateUser = async (req, res) => {
 };
 
 //logout
-exports.logoutUser = (req, res) => {
+const logoutUser = (req, res) => {
   // Clear the token cookie
   res.clearCookie("token");
 
@@ -141,6 +141,17 @@ exports.logoutUser = (req, res) => {
   res.redirect("/login");  // send user back to login page
 };
 
+
+export default {
+  getUsers,
+  seedUsers,
+  registerUser,
+  loginUser,
+  deleteUser,
+  editUserForm,
+  updateUser,
+  logoutUser,
+}
 
 
 

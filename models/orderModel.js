@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
 
+import mongoose from "mongoose";
 const orderSchema = new mongoose.Schema({
   sessionId: String,
   paymentIntentId: String,
@@ -60,5 +60,7 @@ const orderSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-module.exports =
+const Order =
   mongoose.models.Order || mongoose.model("Order", orderSchema);
+
+  export default Order;

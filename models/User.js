@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 // Define user schema
 const userSchema = new mongoose.Schema({
@@ -22,4 +22,6 @@ const userSchema = new mongoose.Schema({
 
 
 // Prevent model overwrite if it’s already compiled
-module.exports = mongoose.models.User || mongoose.model('User', userSchema);
+const User = mongoose.models.User || mongoose.model('User', userSchema);
+
+export default User;

@@ -1,9 +1,10 @@
-const express = require('express');
+import express from 'express';
+
 const router = express.Router();
-const paypalControllers = require('../../controllers/payments/paypal.controllers');
+import paypalControllers from '../../controllers/payments/paypal.controllers.js';
 
 router.post('/pay', paypalControllers.paymentSuccess);
 router.get('/success', paypalControllers.captureOrder);
-router.get('/cancel', paypalControllers.payentCancel)
+router.get('/cancel', paypalControllers.paymentCancel)
 
-module.exports = router;
+export default router;
