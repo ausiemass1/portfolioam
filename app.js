@@ -17,6 +17,9 @@ import paypalRoutes from "./routes/payments/paypalRoutes.js";
 import paymentRoutes from "./routes/payments/stripeRoutes.js";
 import stripeCheckout from "./routes/payments/stripeRoutes.js";
 import connectDB from "./config/db.js";
+import {RedisStore} from "connect-redis";
+import redisClient from "./config/redis.js";
+import cartRoutes from "./routes/cart/cart.routes.js";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -25,9 +28,14 @@ const app = express();
 
 app.use(
   session({
-    secret: "yourSecretKey",
+    store: new RedisStore({ client: redisClient }),
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 // 1 day
+    }
   })
 );
 
@@ -82,6 +90,7 @@ app.use("/", siteRoutes);
 app.use("/paypal", paypalRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/stripe", stripeCheckout);
+app.use("/cart", cartRoutes);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

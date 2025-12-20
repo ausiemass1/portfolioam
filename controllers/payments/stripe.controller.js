@@ -1,5 +1,6 @@
 import stripe from "../../config/stripe.js";
 import Order from"../../models/orderModel.js";
+import redisClient from "../../config/redis.js";
 
 const stripeCheckout = (req, res) => {
   res.render("pages/checkout", { title: "checkout" });
@@ -7,6 +8,13 @@ const stripeCheckout = (req, res) => {
 
 // creating a checkout session
 const stripeCheckoutSessionCreate = async (req, res) => {
+  const key = `cart:${req.sessionID}`;
+  const cart = JSON.parse(await redisClient.get(key));
+
+  if (!cart || cart.items.length === 0) {
+    return res.redirect("/cart");
+  }
+
   try {
     const session = await stripe.checkout.sessions.create({
       line_items: [
@@ -14,11 +22,11 @@ const stripeCheckoutSessionCreate = async (req, res) => {
           price_data: {
             currency: "usd",
             product_data: {
-              name: "node.js video",
+              name: "item.name",
             },
             unit_amount: 10 * 100,
           },
-          quantity: 1,
+          quantity: "item.quantity",
         },
       ],
       mode: "payment",
@@ -36,6 +44,38 @@ const stripeCheckoutSessionCreate = async (req, res) => {
   }
 };
 
+// stripe checkout with redis
+const stripeCheckoutRedis = async (req, res) => {
+  const key = `cart:${req.sessionID}`;
+  const cart = JSON.parse(await redisClient.get(key));
+
+  if (!cart || cart.items.length === 0) {
+    return res.redirect("/cart");
+  }
+
+  const lineItems = cart.items.map(item => ({
+    price_data: {
+      currency: "usd",
+      product_data: {
+        name: item.name,
+        images: [item.image]
+      },
+      unit_amount: Math.round(item.price * 100)
+    },
+    quantity: item.quantity
+  }));
+
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
+    line_items: lineItems,
+    success_url: `${process.env.BASE_URL}/checkout/success`,
+    cancel_url: `${process.env.BASE_URL}/cart`
+  });
+
+  res.redirect(session.url);
+};
+
+
 // stripe success route which also save to database
 const stripeSuccess = async (req, res) => {
   res.redirect("/");
@@ -43,7 +83,7 @@ const stripeSuccess = async (req, res) => {
 
 //Stripe cancel route, when the custoer decides to cancel the payment
 const stripeCancel = (req, res) => {
-  res.redirect("/checkout");
+  res.redirect("/cart");
 };
 
 // stripe wbhook, this is where the order is saved to dataabase
@@ -137,6 +177,7 @@ export default {
   stripeCheckoutSessionCreate,
   stripeCancel,
   stripeSuccess,
-  stripeWebhook
+  stripeWebhook,
+  stripeCheckoutRedis
 
 }
