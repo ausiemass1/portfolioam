@@ -7,6 +7,13 @@ const stripeCheckout = (req, res) => {
 
 // creating a checkout session
 const stripeCheckoutSessionCreate = async (req, res) => {
+  const key = `cart:${req.sessionID}`;
+  const cart = JSON.parse(await redisClient.get(key));
+
+  if (!cart || cart.items.length === 0) {
+    return res.redirect("/cart");
+  }
+
   try {
     const session = await stripe.checkout.sessions.create({
       line_items: [
@@ -14,11 +21,11 @@ const stripeCheckoutSessionCreate = async (req, res) => {
           price_data: {
             currency: "usd",
             product_data: {
-              name: "node.js video",
+              name: item.name,
             },
-            unit_amount: 10 * 100,
+            unit_amount: Math.round(item.price * 100),
           },
-          quantity: 1,
+          quantity: item.quantity,
         },
       ],
       mode: "payment",
@@ -43,7 +50,7 @@ const stripeSuccess = async (req, res) => {
 
 //Stripe cancel route, when the custoer decides to cancel the payment
 const stripeCancel = (req, res) => {
-  res.redirect("/checkout");
+  res.redirect("/cart");
 };
 
 // stripe wbhook, this is where the order is saved to dataabase
