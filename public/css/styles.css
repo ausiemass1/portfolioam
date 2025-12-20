@@ -25,3 +25,13 @@ footer.page-footer {
 footer .container {
   margin-bottom: 0;
 }
+/* Home page styles */
+
+
+.truncate {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
