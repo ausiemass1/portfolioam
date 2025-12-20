@@ -1,5 +1,6 @@
 import stripe from "../../config/stripe.js";
 import Order from"../../models/orderModel.js";
+import redisClient from "../../config/redis.js";
 
 const stripeCheckout = (req, res) => {
   res.render("pages/checkout", { title: "checkout" });
@@ -21,11 +22,11 @@ const stripeCheckoutSessionCreate = async (req, res) => {
           price_data: {
             currency: "usd",
             product_data: {
-              name: item.name,
+              name: "item.name",
             },
-            unit_amount: Math.round(item.price * 100),
+            unit_amount: 10 * 100,
           },
-          quantity: item.quantity,
+          quantity: "item.quantity",
         },
       ],
       mode: "payment",
@@ -42,6 +43,38 @@ const stripeCheckoutSessionCreate = async (req, res) => {
     res.status(500).send("Stripe session error");
   }
 };
+
+// stripe checkout with redis
+const stripeCheckoutRedis = async (req, res) => {
+  const key = `cart:${req.sessionID}`;
+  const cart = JSON.parse(await redisClient.get(key));
+
+  if (!cart || cart.items.length === 0) {
+    return res.redirect("/cart");
+  }
+
+  const lineItems = cart.items.map(item => ({
+    price_data: {
+      currency: "usd",
+      product_data: {
+        name: item.name,
+        images: [item.image]
+      },
+      unit_amount: Math.round(item.price * 100)
+    },
+    quantity: item.quantity
+  }));
+
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
+    line_items: lineItems,
+    success_url: `${process.env.BASE_URL}/checkout/success`,
+    cancel_url: `${process.env.BASE_URL}/cart`
+  });
+
+  res.redirect(session.url);
+};
+
 
 // stripe success route which also save to database
 const stripeSuccess = async (req, res) => {
@@ -144,6 +177,7 @@ export default {
   stripeCheckoutSessionCreate,
   stripeCancel,
   stripeSuccess,
-  stripeWebhook
+  stripeWebhook,
+  stripeCheckoutRedis
 
 }
