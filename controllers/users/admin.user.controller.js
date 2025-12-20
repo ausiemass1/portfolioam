@@ -8,7 +8,7 @@ const getUsers = async (req, res) => {
   res.render('admin/users/users', { title: 'User List', users, layout: 'admin/layout', });
 };
 
-// Seed database
+// Seed database wit users for testing
 const seedUsers = async (req, res) => {
   await User.insertMany([
     { name: 'Alice', age: 25, email: 'alice@example.com' },
