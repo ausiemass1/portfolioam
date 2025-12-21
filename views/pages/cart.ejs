@@ -1,0 +1,23 @@
+<% cart.items.forEach(item => { %>
+    <div class="cart-item">
+      <img src="<%= item.image %>" width="60" />
+  
+      <strong><%= item.name %></strong>
+      <p>Price: $<%= item.price %></p>
+  
+      <form action="/cart/decrement/<%= item.productId %>" method="POST">
+        <button class="btn-small grey">−</button>
+      </form>
+  
+      <span><%= item.quantity %></span>
+  
+      <form action="/cart/add/<%= item.productId %>" method="POST">
+        <button class="btn-small">+</button>
+      </form>
+  
+      <form action="/cart/remove/<%= item.productId %>" method="POST">
+        <button class="btn-small red">Remove</button>
+      </form>
+    </div>
+  <% }) %>
+  
