@@ -1,31 +1,7 @@
 <header>
-  <ul id="dropdown1" class="dropdown-content">
-    <li><a href="https://demo1.hillsidecollegesd.com/">project 1</a></li>
-    <li class="divider"></li>
-   
-
-  </ul>
-
-  <ul id="dropdown2" class="dropdown-content">
-    <li><a href="#!">Algebra</a></li>
-    <li class="divider"></li>
-    <li><a href="#!">Calculus</a></li>
-    <li class="divider"></li>
-    <li><a href="#!">Probability & Statistics</a></li>
-  </ul>
+ 
 
 
-  <ul id="dropdown3" class="dropdown-content">
-    <li><a href="#!">Integration</a></li>
-    <li class="divider"></li>
-    <li><a href="#!">Differentiation</a></li>
-    <li class="divider"></li>
-    <li><a href="#!">Complex Numbers</a></li>
-    <li class="divider"></li>
-    <li><a href="#!">Probability</a></li>
-    <li class="divider"></li>
-    <li><a href="#!">Normal distribution</a></li>
-  </ul>
 
   <div class="navbar-fixed">
     <nav class="nav-logo">
@@ -35,13 +11,18 @@
         <ul class="right hide-on-med-and-down">
           <li><a href="/">Home</a></li>
           <li><a href="/about">About</a></li>
-          <li><a href="/login">Login</a></li>
-          <li><a href="/projects">Projects</a></li>
-          <li><a href="/users/logout">logout</a></li>
           <li><a href="/register">Register</a></li>
-          <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Level 1<i class="material-icons right">arrow_drop_down</i></a></li>
-          <li><a class="dropdown-trigger" href="#!" data-target="dropdown2">Level 2<i class="material-icons right">arrow_drop_down</i></a></li>
-          <li><a class="dropdown-trigger" href="#!" data-target="dropdown3">Level 3<i class="material-icons right">arrow_drop_down</i></a></li>
+          <li><a href="/login">Login</a></li>        
+          <li class="cart-icon">
+            <a href="/cart">
+              <span class="material-icons">add_shopping_cart</span>
+          
+              <% if (cart && cart.totalQuantity > 0) { %>
+                <span class="cart-count "> <%= cart.totalQuantity %></span>
+              <% } %>
+            </a>
+          </li>
+          <li><a href="/users/logout">logout</a></li>
         </ul>
       </div>
     </nav>

@@ -116,7 +116,6 @@ footer .container {
 }
 
 .btn {
-  /* /padding: 12px 20px; */
   display: flex;
   border-radius: 4px;
   font-weight: 600;
@@ -139,4 +138,26 @@ footer .container {
   background: #c62828;
   color: #fff;
 }
+.cart-icon {
+  position: relative;
+}
+
+.cart-count {
+  position: absolute;
+  top: 2px;      /* pushes it up (superscript effect) */
+  right: 1px;    /* pushes it to the corner */
+  background: red;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 

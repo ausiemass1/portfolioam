@@ -67,6 +67,22 @@ app.set("layout", "./layout"); // This tells Express to use views/layout.ejs as 
 // Parse form data (optional)
 app.use(cookieParser());
 
+//this makes cart available to ejs files also
+app.use(async (req, res, next) => {
+  const key = `cart:${req.sessionID}`;
+  const cartData = await redisClient.get(key);
+
+  res.locals.cart = cartData
+    ? JSON.parse(cartData)
+    : {
+        items: [],
+        totalQuantity: 0,
+        totalPrice: 0
+      };
+
+  next();
+});
+
 // Serve static files (CSS, JS, images) from /public
 app.use(express.static(path.join(__dirname, "public")));
 
