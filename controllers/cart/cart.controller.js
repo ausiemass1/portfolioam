@@ -48,7 +48,15 @@ const cartAdd = async (req, res) => {
 //view cart items
 const cartDisplay = async (req, res) => {
   const key = `cart:${req.sessionID}`;
-  const cart = JSON.parse(await redisClient.get(key));
+  const cartData = JSON.parse(await redisClient.get(key));
+  const cart = cartData
+  ? JSON.parse(cartData)
+  : {
+      items: [],
+      totalQuantity: 0,
+      totalPrice: 0
+    };
+
 
   res.render("pages/cart", { cart });
 };

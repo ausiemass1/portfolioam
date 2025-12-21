@@ -25,7 +25,7 @@ router.post("/create-payment-intent", async (req, res) => {
   }
 });
 
-router.get("/checkout", stripeController.stripeCheckout);
+router.get("/checkout", stripeController.stripeCheckoutRedis);
 router.post("/checkout", stripeController.stripeCheckoutRedis);
 router.get("/success", stripeController.stripeSuccess);
 router.get("/cancel", stripeController.stripeCancel);

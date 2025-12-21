@@ -68,8 +68,8 @@ const stripeCheckoutRedis = async (req, res) => {
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     line_items: lineItems,
-    success_url: `${process.env.BASE_URL}/checkout/success`,
-    cancel_url: `${process.env.BASE_URL}/cart`
+    success_url: `${process.env.WEB_URL}/stripe/success`,
+    cancel_url: `${process.env.WEB_URL}/cart`
   });
 
   res.redirect(session.url);
@@ -78,6 +78,8 @@ const stripeCheckoutRedis = async (req, res) => {
 
 // stripe success route which also save to database
 const stripeSuccess = async (req, res) => {
+  const cartKey = `cart:${req.sessionID}`;
+  await redisClient.del(cartKey);
   res.redirect("/");
 };
 
