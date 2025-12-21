@@ -62,11 +62,15 @@
     <div class="cart-actions">
       <a href="/" class="btn outline">Continue shopping</a>
   
-      <form action="/cart/clear" method="POST">
-        <button class="btn danger">Clear trolley</button>
-      </form>
-  
-      <a href="/stripe/checkout" class="btn primary">Checkout</a>
+      <% if (cart && cart.totalQuantity > 0) { %>
+
+        <form action="/cart/clear" method="POST">
+          <button class="btn danger">Clear trolley</button>
+        </form>
+      
+        <a href="/stripe/checkout" class="btn primary">Checkout</a>
+      
+      <% } %>
     </div>
   
   </div>
