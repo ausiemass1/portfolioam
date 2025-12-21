@@ -93,6 +93,20 @@ A full-stack e-commerce web application built with **Node.js, Express, MongoDB, 
 
 ---
 
+## 🧹 Code Quality & Linting
+
+This project uses automated linting to maintain consistent code quality and prevent runtime errors across JavaScript, CSS, and EJS templates.
+
+## ✅ Tools Used
+
+- ESLint – Lints JavaScript for syntax errors and best practices
+
+- Stylelint – Validates and enforces standards for CSS
+
+- ejs-lint – Checks EJS templates for syntax errors
+
+- Prettier – Formats CSS and EJS for consistent styling
+
 ## ⚙️ Environment Variables
 
 Create a `.env` file:
