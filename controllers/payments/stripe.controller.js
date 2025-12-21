@@ -49,6 +49,7 @@ const stripeCheckoutRedis = async (req, res) => {
   const key = `cart:${req.sessionID}`;
   const cart = JSON.parse(await redisClient.get(key));
 
+// if there are no product in the cart the checkout link will return back to /cart
   if (!cart || cart.items.length === 0) {
     return res.redirect("/cart");
   }
