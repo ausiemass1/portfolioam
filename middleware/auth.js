@@ -1,26 +1,24 @@
-import jwt from "jsonwebtoken";
+import passport from "passport";
 
-const auth = (req, res, next) => {
-  // If user is logged in with Google OAuth (Passport session)
-  if (req.user) {
-    return next();
-  }
+//local login 
+const localLogin = passport.authenticate("local", {
+  successRedirect: "/admin/dashboard",
+  failureRedirect: "/login",
+  failureFlash: false // set true if using connect-flash
+})
 
-  // Otherwise check JWT token (normal login)
-  const token = req.cookies.token;
+// Google login (initial redirect)
+const googleLogin = passport.authenticate("google", {
+  scope: ["profile", "email"],
+});
 
-  if (!token) {
-    return res.redirect("/login");
-  }
+// GitHub login (initial redirect)
+const githubLogin = passport.authenticate("github", {
+  scope: ["user:email"],
+});
 
-  try {
-    const verified = jwt.verify(token, "MYSECRET");
-    req.user = verified;
-    next();
-  } catch (err) {
-    console.log(err)
-    return res.redirect("/login");
-  }
-};
-
-export default auth;
+export default {
+  googleLogin,
+  githubLogin,
+  localLogin,
+}
