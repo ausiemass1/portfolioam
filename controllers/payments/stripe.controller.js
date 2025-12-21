@@ -49,6 +49,7 @@ const stripeCheckoutRedis = async (req, res) => {
   const key = `cart:${req.sessionID}`;
   const cart = JSON.parse(await redisClient.get(key));
 
+// if there are no product in the cart the checkout link will return back to /cart
   if (!cart || cart.items.length === 0) {
     return res.redirect("/cart");
   }
@@ -68,8 +69,8 @@ const stripeCheckoutRedis = async (req, res) => {
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     line_items: lineItems,
-    success_url: `${process.env.BASE_URL}/checkout/success`,
-    cancel_url: `${process.env.BASE_URL}/cart`
+    success_url: `${process.env.WEB_URL}/stripe/success`,
+    cancel_url: `${process.env.WEB_URL}/cart`
   });
 
   res.redirect(session.url);
@@ -78,6 +79,8 @@ const stripeCheckoutRedis = async (req, res) => {
 
 // stripe success route which also save to database
 const stripeSuccess = async (req, res) => {
+  const cartKey = `cart:${req.sessionID}`;
+  await redisClient.del(cartKey);
   res.redirect("/");
 };
 

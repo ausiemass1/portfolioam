@@ -1,0 +1,78 @@
+<div class="cart-container">
+
+    <h2>Your Trolley</h2>
+  
+    <div class="cart-header">
+      <span>Product</span>
+      <span>Price</span>
+      <span>Quantity</span>
+      <span>Item total</span>
+      <span></span>
+    </div>
+  
+    <% cart.items.forEach(item => { %>
+      <div class="cart-row">
+  
+        <div class="product-cell">
+          <img src="<%= item.image %>" width="60" />
+          <strong><%= item.name %></strong>
+        </div>
+  
+        <div>$<%= item.price.toFixed(2) %></div>
+  
+        <div class="qty-cell">
+          <form action="/cart/decrement/<%= item.productId %>" method="POST">
+            <button class="qty-btn">−</button>
+          </form>
+  
+          <span><%= item.quantity %></span>
+  
+          <form action="/cart/add/<%= item.productId %>" method="POST">
+            <button class="qty-btn">+</button>
+          </form>
+        </div>
+  
+        <div>
+          $<%= (item.price * item.quantity).toFixed(2) %>
+        </div>
+  
+        <div>
+          <form action="/cart/remove/<%= item.productId %>" method="POST">
+            <button class="remove-btn">✕</button>
+          </form>
+        </div>
+  
+      </div>
+    <% }) %>
+  
+    <!-- TOTALS -->
+    <div class="cart-summary">
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span>$<%= cart.totalPrice.toFixed(2) %></span>
+      </div>
+  
+      <div class="summary-row total">
+        <strong>Total</strong>
+        <strong>$<%= cart.totalPrice.toFixed(2) %></strong>
+      </div>
+    </div>
+  
+    <!-- ACTION BUTTONS -->
+    <div class="cart-actions">
+      <a href="/" class="btn outline">Continue shopping</a>
+  
+      <% if (cart && cart.totalQuantity > 0) { %>
+
+        <form action="/cart/clear" method="POST">
+          <button class="btn danger">Clear trolley</button>
+        </form>
+      
+        <a href="/stripe/checkout" class="btn primary">Checkout</a>
+      
+      <% } %>
+    </div>
+  
+  </div>
+  
+  

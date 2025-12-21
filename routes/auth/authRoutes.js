@@ -1,17 +1,14 @@
 import express from "express";
 import authController from "../../controllers/auth/authController.js";
-import googleAuth from "../../middleware/googleAuth.js";
+import auth from "../../middleware/auth.middleware.js";
 import passport from "passport";
+//import auth from "../middleware/auth.middleware.js";
 
 const router = express.Router();
+router.post("/login", auth.localLogin);
 
 //redirect to google
-router.get("/google", googleAuth.googleLogin);
-
-//redirect to github
-router.get("/github", googleAuth.githubLogin);
-
-//login with google
+router.get("/google", auth.googleLogin);//login with google
 router.get(
   "/google/callback",
   passport.authenticate("google", {
@@ -19,6 +16,9 @@ router.get(
   }),
   authController.loginSuccess
 );
+
+//redirect to github
+router.get("/github", auth.githubLogin);
 
 //login with github
 router.get(

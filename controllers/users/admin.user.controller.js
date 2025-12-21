@@ -94,7 +94,7 @@ const deleteUser = async (req, res) => {
     const userId = req.params.id;  // Get the user ID from the URL
     await User.findByIdAndDelete(userId); // Delete the user from the DB
 
-    res.redirect('/admin/users/users'); // After deleting, go back to the user list page
+    res.redirect('/admin/users'); // After deleting, go back to the user list page
   } catch (error) {
     console.error(error);
     res.status(500).send('Error deleting user');

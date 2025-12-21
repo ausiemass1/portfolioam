@@ -1,7 +1,31 @@
 import passport from "passport";
+import bcrypt from "bcrypt";
+import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as GithubStrategy } from "passport-github2";
+import User from "../models/User.js";
 
+/* LOCAL STRATEGY */
+passport.use(
+  new LocalStrategy(
+    { usernameField: "email" },
+    async (email, password, done) => {
+      try {
+        const user = await User.findOne({ email });
+        if (!user) return done(null, false);
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) return done(null, false);
+
+        return done(null, user);
+      } catch (err) {
+        return done(err);
+      }
+    }
+  )
+);
+
+/* GOOGLE STRATEGY */
 passport.use(
   new GoogleStrategy(
     {
@@ -9,12 +33,27 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: process.env.GOOGLE_CALLBACK_URL,
     },
-    (accessToken, refreshToken, profile, done) => {
-      return done(null, profile);
+    async (_, __, profile, done) => {
+      try {
+        let user = await User.findOne({ googleId: profile.id });
+
+        if (!user) {
+          user = await User.create({
+            googleId: profile.id,
+            email: profile.emails[0].value,
+            name: profile.displayName,
+          });
+        }
+
+        done(null, user);
+      } catch (err) {
+        done(err);
+      }
     }
   )
 );
 
+/* GITHUB STRATEGY */
 passport.use(
   new GithubStrategy(
     {
@@ -22,12 +61,26 @@ passport.use(
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
       callbackURL: process.env.GITHUB_CALLBACK_URL,
     },
-    (accessToken, refreshToken, profile, done) => {
-      return done(null, profile);
+    async (_, __, profile, done) => {
+      try {
+        let user = await User.findOne({ githubId: profile.id });
+
+        if (!user) {
+          user = await User.create({
+            githubId: profile.id,
+            name: profile.username,
+          });
+        }
+
+        done(null, user);
+      } catch (err) {
+        done(err);
+      }
     }
   )
 );
 
+/* SESSION HANDLING*/
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 

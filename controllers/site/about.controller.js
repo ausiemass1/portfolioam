@@ -1,11 +1,11 @@
 
 // About page
-const about = (req, res) => {
-    res.render("pages/about", { title: "About Us" });
+const contact = (req, res) => {
+    res.render("pages/contact", { title: "Contact Us" });
   };
   
   export default{
-    about,
+    contact,
   }
   
   

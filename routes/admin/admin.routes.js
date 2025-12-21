@@ -1,8 +1,8 @@
 import express from 'express';
 const router = express.Router();
 
-//import requireAuth from '../../middleware/auth.middleware.js';
-//import requireAdmin from '../../middleware/admin.middleware.js';
+// import requireAuth from '../../middleware/auth.middleware.js';
+// import requireAdmin from '../../middleware/admin.middleware.js';
 
 import userRoutes from './users.routes.js';
 import productRoutes from './products.routes.js';

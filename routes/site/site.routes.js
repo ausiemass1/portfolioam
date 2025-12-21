@@ -9,7 +9,7 @@ import registerController from "../../controllers/site/register.controller.js";
 import projectsController from "../../controllers/site/projects.conroller.js";
 
 router.get("/", homeController.home);
-router.get("/about", aboutController.about);
+router.get("/contact", aboutController.contact);
 router.get("/projects", projectsController.projects);
 router.get("/login", loginController.login);
 router.get("/register", registerController.getRegisterForm);
