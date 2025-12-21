@@ -121,9 +121,24 @@ const cartRemove = async (req, res) => {
   }
 };
 
+//Clear the cart
+const clearCart = async (req, res) => {
+    const key = `cart:${req.sessionID}`;
+  
+    await redisClient.set(key, JSON.stringify({
+      items: [],
+      totalQuantity: 0,
+      totalPrice: 0
+    }));
+  
+    res.redirect("/cart");
+  };
+  
+
 export default {
   cartAdd,
   cartDisplay,
   cartDecrement,
   cartRemove,
+  clearCart,
 };
