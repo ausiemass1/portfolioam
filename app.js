@@ -7,7 +7,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import flash from "connect-flash";
-import refreshToken from "./middleware/refreshToken.js";
+
 import passport from "./config/passport.js";
 import userRoutes from "./routes/admin/users.routes.js";
 import siteRoutes from "./routes/site/site.routes.js";
@@ -17,7 +17,7 @@ import paypalRoutes from "./routes/payments/paypalRoutes.js";
 import paymentRoutes from "./routes/payments/stripeRoutes.js";
 import stripeCheckout from "./routes/payments/stripeRoutes.js";
 import connectDB from "./config/db.js";
-import {RedisStore} from "connect-redis";
+import { RedisStore } from "connect-redis";
 import redisClient from "./config/redis.js";
 import cartRoutes from "./routes/cart/cart.routes.js";
 import { fileURLToPath } from "url";
@@ -34,8 +34,8 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 // 1 day
-    }
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+    },
   })
 );
 
@@ -77,7 +77,7 @@ app.use(async (req, res, next) => {
     : {
         items: [],
         totalQuantity: 0,
-        totalPrice: 0
+        totalPrice: 0,
       };
 
   next();
@@ -95,7 +95,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use("/auth", authRoutes);
-app.use(refreshToken);
 
 // --------------------
 // ROUTES
