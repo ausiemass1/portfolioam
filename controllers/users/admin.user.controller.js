@@ -1,6 +1,5 @@
 import User from '../../models/User.js';
 import bcrypt from 'bcrypt';
-import jwt from "jsonwebtoken";
 
 // Display all users
 const getUsers = async (req, res) => {
@@ -53,42 +52,7 @@ const registerUser = async (req, res) => {
     }
 };
 
-// Handle login users
-const loginUser = async (req, res) => {
-  try {
-      const { email, password } = req.body;
-
-      // Check if user exists
-      const user = await User.findOne({ email });
-      if (!user) {
-          return res.status(400).send("Invalid email or password");
-      }
-
-      // Compare hashed password
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-          return res.status(400).send("Invalid email or password");
-      }
-
-      // Create JWT token
-    const token = jwt.sign(
-      { id: user._id },   // payload
-      "MYSECRET",         // secret key
-      { expiresIn: "1d" } // token duration
-    );
-
-    // Store token in cookie
-    res.cookie("token", token, { httpOnly: true,
-      maxAge: 2 * 60 * 1000,  }); // automatic logout after 2 minutes
-
-      // res.send("Login successful!");
-      res.redirect('/admin/dashboard');
-  } catch (err) {
-      console.error(err);
-      res.status(500).send("Server error");
-  }
-};
-
+// delete user
 const deleteUser = async (req, res) => {
   try {
     const userId = req.params.id;  // Get the user ID from the URL
@@ -146,7 +110,6 @@ export default {
   getUsers,
   seedUsers,
   registerUser,
-  loginUser,
   deleteUser,
   editUserForm,
   updateUser,

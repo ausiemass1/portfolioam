@@ -1,5 +1,6 @@
 import express from "express";
 import userController from "../../controllers/users/admin.user.controller.js";
+import auth from "../../middleware/auth.middleware.js"
 
 
 const router = express.Router();
@@ -12,7 +13,6 @@ router.get('/edit/:id', userController.editUserForm);
 router.get('/logout', userController.logoutUser);
 // POST /register
 router.post('/register', userController.registerUser);
-router.post('/login', userController.loginUser);
 router.post('/update/:id', userController.updateUser);
 
 export default router;

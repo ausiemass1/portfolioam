@@ -2,6 +2,8 @@ import stripe from "../../config/stripe.js";
 import Order from"../../models/orderModel.js";
 import redisClient from "../../config/redis.js";
 
+
+// checkout route
 const stripeCheckout = (req, res) => {
   res.render("pages/checkout", { title: "checkout" });
 };

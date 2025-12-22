@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import flash from "connect-flash";
 
+import authMiddleware from "./middleware/auth.middleware.js";
 import passport from "./config/passport.js";
 import userRoutes from "./routes/admin/users.routes.js";
 import siteRoutes from "./routes/site/site.routes.js";
@@ -25,6 +26,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
+const isAuth = authMiddleware.isAuth
 
 app.use(
   session({
@@ -94,18 +96,17 @@ app.use(passport.session()); // use session
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use("/auth", authRoutes);
-
 // --------------------
 // ROUTES
 // --------------------
 app.use("/users", userRoutes);
-app.use("/admin", adminRoutes);
+app.use("/admin", isAuth, adminRoutes);
 app.use("/", siteRoutes);
 app.use("/paypal", paypalRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/stripe", stripeCheckout);
 app.use("/cart", cartRoutes);
+app.use("/auth", authRoutes);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
