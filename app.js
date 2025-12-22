@@ -18,7 +18,6 @@ import paypalRoutes from "./routes/payments/paypalRoutes.js";
 import paymentRoutes from "./routes/payments/stripeRoutes.js";
 import stripeCheckout from "./routes/payments/stripeRoutes.js";
 import connectDB from "./config/db.js";
-import { RedisStore } from "connect-redis";
 import redisClient from "./config/redis.js";
 import cartRoutes from "./routes/cart/cart.routes.js";
 import { fileURLToPath } from "url";
