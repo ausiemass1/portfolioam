@@ -48,34 +48,42 @@ const stripeCheckoutSessionCreate = async (req, res) => {
 
 // stripe checkout with redis
 const stripeCheckoutRedis = async (req, res) => {
-  const key = `cart:${req.sessionID}`;
-  const cart = JSON.parse(await redisClient.get(key));
+  try {
+    const key = `cart:${req.sessionID}`;
+    const cart = await redisClient.get(key);
 
-// if there are no product in the cart the checkout link will return back to /cart
-  if (!cart || cart.items.length === 0) {
-    return res.redirect("/cart");
-  }
+    // Guard: empty cart
+    if (!cart || cart.items.length === 0) {
+      return res.redirect("/cart");
+    }
 
-  const lineItems = cart.items.map(item => ({
-    price_data: {
-      currency: "usd",
-      product_data: {
-        name: item.name,
-        images: [item.image]
+    const lineItems = cart.items.map((item) => ({
+      price_data: {
+        currency: "nzd", // or "usd`"
+        product_data: {
+          name: item.name,
+          images: [item.image],
+        },
+        unit_amount: Math.round(item.price * 100),
       },
-      unit_amount: Math.round(item.price * 100)
-    },
-    quantity: item.quantity
-  }));
+      quantity: item.quantity,
+    }));
 
-  const session = await stripe.checkout.sessions.create({
-    mode: "payment",
-    line_items: lineItems,
-    success_url: `${process.env.WEB_URL}/stripe/success`,
-    cancel_url: `${process.env.WEB_URL}/cart`
-  });
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      line_items: lineItems,
+      success_url: `${process.env.WEB_URL}/stripe/success`,
+      cancel_url: `${process.env.WEB_URL}/cart`,
+      metadata: {
+        sessionId: req.sessionID,
+      },
+    });
 
-  res.redirect(session.url);
+    res.redirect(session.url);
+  } catch (err) {
+    console.error("Stripe checkout error:", err);
+    res.redirect("/cart");
+  }
 };
 
 
