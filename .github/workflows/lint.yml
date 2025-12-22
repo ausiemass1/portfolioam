@@ -24,8 +24,7 @@ jobs:
         run: npm ci
 
       - name: Lint JavaScript
-        run: npm run lint || true
-        if: ${{ always() }}
+        run: npm run lint
 
       - name: Lint CSS
         run: npm run lint:css
