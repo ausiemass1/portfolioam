@@ -18,7 +18,6 @@ import paypalRoutes from "./routes/payments/paypalRoutes.js";
 import paymentRoutes from "./routes/payments/stripeRoutes.js";
 import stripeCheckout from "./routes/payments/stripeRoutes.js";
 import connectDB from "./config/db.js";
-import { RedisStore } from "connect-redis";
 import redisClient from "./config/redis.js";
 import cartRoutes from "./routes/cart/cart.routes.js";
 import { fileURLToPath } from "url";
@@ -30,14 +29,14 @@ const isAuth = authMiddleware.isAuth
 
 app.use(
   session({
-    store: new RedisStore({ client: redisClient }),
+    // store: new RedisStore({ client: redisClient }),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24, // 1 day
-    },
+    // cookie: {
+    //   httpOnly: true,
+    //   maxAge: 1000 * 60 * 60 * 24, // 1 day
+    // },
   })
 );
 
@@ -72,18 +71,18 @@ app.use(cookieParser());
 //this makes cart available to ejs files also
 app.use(async (req, res, next) => {
   const key = `cart:${req.sessionID}`;
-  const cartData = await redisClient.get(key);
 
-  res.locals.cart = cartData
-    ? JSON.parse(cartData)
-    : {
-        items: [],
-        totalQuantity: 0,
-        totalPrice: 0,
-      };
+  const cart =
+    (await redisClient.get(key)) || {
+      items: [],
+      totalQuantity: 0,
+      totalPrice: 0,
+    };
 
+  res.locals.cart = cart;
   next();
 });
+
 
 // Serve static files (CSS, JS, images) from /public
 app.use(express.static(path.join(__dirname, "public")));
