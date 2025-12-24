@@ -5,10 +5,10 @@
   "license": "ISC",
   "author": "",
   "type": "module",
-  "main": "app.js",
+  "main": "app.mjs",
   "scripts": {
-    "dev": "nodemon app.js",
-    "start": "node app.js",
+    "dev": "nodemon app.mjs",
+    "start": "node app.mjs",
     "lint": "eslint .",
     "lint:css": "stylelint \"public/css/**/*.css\"",
     "lint:ejs": "ejslint \"views/**/*.ejs\""
