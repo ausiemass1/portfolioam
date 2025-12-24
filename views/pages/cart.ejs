@@ -1,78 +1,150 @@
 <div class="cart-container">
 
-    <h2>Your Trolley</h2>
-  
-    <div class="cart-header">
-      <span>Product</span>
-      <span>Price</span>
-      <span>Quantity</span>
-      <span>Item total</span>
-      <span></span>
-    </div>
-  
-    <% cart.items.forEach(item => { %>
-      <div class="cart-row">
-  
-        <div class="product-cell">
-          <img src="<%= item.image %>" width="60" />
-          <strong><%= item.name %></strong>
-        </div>
-  
-        <div>$<%= item.price.toFixed(2) %></div>
-  
-        <div class="qty-cell">
-          <form action="/cart/decrement/<%= item.productId %>" method="POST">
-            <button class="qty-btn">−</button>
-          </form>
-  
-          <span><%= item.quantity %></span>
-  
-          <form action="/cart/add/<%= item.productId %>" method="POST">
-            <button class="qty-btn">+</button>
-          </form>
-        </div>
-  
-        <div>
-          $<%= (item.price * item.quantity).toFixed(2) %>
-        </div>
-  
-        <div>
-          <form action="/cart/remove/<%= item.productId %>" method="POST">
-            <button class="remove-btn">✕</button>
-          </form>
-        </div>
-  
-      </div>
-    <% }) %>
-  
-    <!-- TOTALS -->
-    <div class="cart-summary">
-      <div class="summary-row">
-        <span>Subtotal</span>
-        <span>$<%= cart.totalPrice.toFixed(2) %></span>
-      </div>
-  
-      <div class="summary-row total">
-        <strong>Total</strong>
-        <strong>$<%= cart.totalPrice.toFixed(2) %></strong>
-      </div>
-    </div>
-  
-    <!-- ACTION BUTTONS -->
-    <div class="cart-actions">
-      <a href="/" class="btn outline">Continue shopping</a>
-  
-      <% if (cart && cart.totalQuantity > 0) { %>
+  <h2>Your Trolley</h2>
 
-        <form action="/cart/clear" method="POST">
-          <button class="btn danger">Clear trolley</button>
-        </form>
-      
-        <a href="/stripe/checkout" class="btn primary">Checkout</a>
-      
-      <% } %>
-    </div>
-  
+  <div class="cart-header">
+    <span>Product</span>
+    <span>Price</span>
+    <span>Quantity</span>
+    <span>Item total</span>
+    <span></span>
   </div>
-  
-  
+
+  <% cart.items.forEach(item=> { %>
+    <div class="cart-row">
+
+      <div class="product-cell">
+        <img src="<%= item.image %>" width="60" />
+        <strong>
+          <%= item.name %>
+        </strong>
+      </div>
+
+      <div>$<%= item.price.toFixed(2) %>
+      </div>
+
+      <div class="qty-cell">
+        <button class="qty-btn decrement" data-id="<%= item.productId %>" type="button">−</button>
+        <span data-qty-id="<%= item.productId %>">
+          <%= item.quantity %>
+        </span>
+        <button class="qty-btn increment" data-id="<%= item.productId %>" data-price="<%= item.price %>">+</button>
+      </div>
+
+      <div data-total-id="<%= item.productId %>">
+        $<%= (item.price * item.quantity).toFixed(2) %>
+      </div>
+
+      <div>
+        <button class="remove-btn remove" data-id="<%= item.productId %>" type="button">✕</button>
+      </div>
+
+    </div>
+    <% }) %>
+
+      <!-- TOTALS -->
+      <div class="cart-summary">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="cart-subtotal">
+            $<%= cart.totalPrice.toFixed(2) %>
+          </span>
+        </div>
+
+        <div class="summary-row total">
+          <strong>Total</strong>
+          <strong id="cart-total">
+            $<%= cart.totalPrice.toFixed(2) %>
+          </strong>
+        </div>
+      </div>
+
+
+      <!-- ACTION BUTTONS -->
+      <div class="cart-actions">
+        <a href="/" class="btn outline">Continue shopping</a>
+
+        <% if (cart && cart.totalQuantity> 0) { %>
+
+          <form action="/cart/clear" method="POST">
+            <button class="btn danger">Clear trolley</button>
+          </form>
+
+          <a href="/stripe/checkout" class="btn primary">Checkout</a>
+
+          <% } %>
+      </div>
+
+</div>
+
+<script>document.addEventListener("click", async (e) => {
+    if (e.target.classList.contains("increment")) {
+      updateCart("increment", e.target.dataset.id);
+    }
+
+    if (e.target.classList.contains("decrement")) {
+      updateCart("decrement", e.target.dataset.id);
+    }
+
+    if (e.target.classList.contains("remove")) {
+      updateCart("remove", e.target.dataset.id);
+    }
+  });
+
+  async function updateCart(action, productId) {
+  try {
+    const res = await fetch(`/cart/${action}/${productId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" }
+    });
+
+    const data = await res.json();
+    if (!data.success) return;
+
+    if (action === "remove" || data.item.quantity === 0) {
+      document
+        .querySelector(`[data-qty-id="${productId}"]`)
+        ?.closest(".cart-row")
+        .remove();
+    } else {
+      document.querySelector(`[data-qty-id="${productId}"]`).innerText =
+        data.item.quantity;
+
+      document.querySelector(`[data-total-id="${productId}"]`).innerText =
+        `$${(data.item.price * data.item.quantity).toFixed(2)}`;
+    }
+
+    document.querySelector("#cart-subtotal").innerText =
+      `$${data.cart.totalPrice.toFixed(2)}`;
+    document.querySelector("#cart-total").innerText =
+      `$${data.cart.totalPrice.toFixed(2)}`;
+
+    // 🔥 THIS WAS MISSING
+    updateCartBadge(data.cart.totalQuantity);
+
+  } catch (err) {
+    console.error("Cart update failed", err);
+  }
+}
+
+
+</script>
+
+<script>
+ function updateCartBadge(totalQuantity) {
+  document.querySelectorAll("#cart-count").forEach(badge => {
+    if (totalQuantity > 0) {
+      badge.textContent = totalQuantity;
+      badge.style.display = "flex";
+
+      // 🔥 Force repaint (Materialize fix)
+      badge.style.visibility = "hidden";
+      badge.offsetHeight; // force reflow
+      badge.style.visibility = "visible";
+    } else {
+      badge.style.display = "none";
+    }
+  });
+}
+
+</script>

@@ -98,6 +98,16 @@ app.use(express.json());
 // --------------------
 // ROUTES
 // --------------------
+//CI/CD route for restaing node
+app.post("/__restart", (req, res) => {
+  if (req.headers.authorization !== `Bearer ${process.env.RESTART_SECRET}`) {
+    return res.sendStatus(403);
+  }
+
+  res.send("Restarting");
+  process.exit(0);
+});
+//all other roues
 app.use("/users", userRoutes);
 app.use("/admin", isAuth, adminRoutes);
 app.use("/", siteRoutes);
