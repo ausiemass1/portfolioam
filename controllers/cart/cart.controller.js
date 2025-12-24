@@ -232,10 +232,54 @@ const clearCart = async (req, res) => {
   }
 };
 
+// controllers/cart.controller.js
+export const incrementCartItemAjax = async (req, res) => {
+  try {
+    const key = `cart:${req.sessionID}`;
+    const { productId } = req.params;
+
+    const cartRaw = await redisClient.get(key);
+
+    const cart =
+      typeof cartRaw === "string"
+        ? JSON.parse(cartRaw)
+        : cartRaw || {
+            items: [],
+            totalQuantity: 0,
+            totalPrice: 0,
+          };
+
+    const item = cart.items.find(i => i.productId === productId);
+
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+
+    item.quantity += 1;
+    cart.totalQuantity += 1;
+    cart.totalPrice += item.price;
+
+    await redisClient.set(key, JSON.stringify(cart));
+
+    res.json({
+      success: true,
+      item,
+      cart,
+    });
+  } catch (err) {
+    console.error("Increment error:", err);
+    res.status(500).json({ success: false });
+  }
+};
+
+
+
+
 export default {
   cartAdd,
   cartDisplay,
   cartDecrement,
   cartRemove,
   clearCart,
+  incrementCartItemAjax,
 };
