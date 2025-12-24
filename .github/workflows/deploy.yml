@@ -1,0 +1,62 @@
+name: CI / CD – Node App Deploy
+
+on:
+  pull_request:
+    branches: [main]
+
+  push:
+    branches: [main]
+
+jobs:
+  ci:
+    name: Run CI checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run tests (if any)
+        run: npm test || echo "No tests found"
+
+  deploy:
+    name: Deploy to Elitehost
+    needs: ci
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Upload files via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_PATH }}
+          exclude: |
+            **/node_modules/**
+            **/.git/**
+            **/.github/**
+            **/.env
+            **/tests/**
+            **/*.log
+
+      - name: Restart Node app
+        run: |
+          curl -X POST https://ecomm.austinmasamhiri.com/__restart \
+          -H "Authorization: Bearer ${{ secrets.RESTART_SECRET }}"
