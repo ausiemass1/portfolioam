@@ -14,13 +14,18 @@
           <li><a href="/register">Register</a></li>
           <li><a href="/login">Login</a></li>        
           <li class="cart-icon">
-            <a href="/cart">
+            <a href="/cart" id="cart-link">
               <span class="material-icons">add_shopping_cart</span>
-          
-              <% if (cart && cart.totalQuantity > 0) { %>
-                <span class="cart-count "> <%= cart.totalQuantity %></span>
-              <% } %>
+            
+              <span
+                id="cart-count"
+                class="cart-count"
+                style="<%= cart?.totalQuantity > 0 ? '' : 'display:none' %>"
+              >
+                <%= cart?.totalQuantity || 0 %>
+              </span>
             </a>
+            
           </li>
           <li><a href="/users/logout">logout</a></li>
         </ul>

@@ -1,49 +1,17 @@
 import Product from "../../models/productsModel.js";
 import redisClient from "../../config/redis.js";
-// Add product to cart
-// const cartAdd = async (req, res) => {
-//   try {
-//     const { productId } = req.params;
-//     const sessionId = req.sessionID;
 
-//     const product = await Product.findById(productId);
-//     if (!product) return res.redirect("/products");
+const emptyCart = {
+  items: [],
+  totalQuantity: 0,
+  totalPrice: 0
+};
 
-//     const key = `cart:${sessionId}`;
+const parseCart = (cartRaw) => {
+  if (!cartRaw) return structuredClone(emptyCart);
+  return typeof cartRaw === "string" ? JSON.parse(cartRaw) : cartRaw;
+};
 
-//     const cart = JSON.parse(await redisClient.get(key)) || {
-//       items: [],
-//       totalQuantity: 0,
-//       totalPrice: 0,
-//     };
-
-//     const item = cart.items.find((i) => i.productId === productId);
-
-//     if (item) {
-//       item.quantity += 1;
-//     } else {
-//       cart.items.push({
-//         productId,
-//         name: product.name,
-//         price: product.price,
-//         image: product.images?.[0] || "/img/placeholder.png",
-//         quantity: 1,
-//       });
-//     }
-
-//     cart.totalQuantity += 1;
-//     cart.totalPrice += product.price;
-
-//     await redisClient.set(key, JSON.stringify(cart), {
-//       EX: 60 * 60 * 24,
-//     });
-
-//     res.redirect(req.get("Referer") || "/products");
-//   } catch (err) {
-//     console.error("Cart add error:", err);
-//     res.redirect("/products");
-//   }
-// };
 
 // Add product to cart
 const cartAdd = async (req, res) => {
@@ -129,84 +97,83 @@ const cartDisplay = async (req, res) => {
 };
 
 // Decrement item quantity
-const cartDecrement = async (req, res) => {
+export const cartDecrement = async (req, res) => {
   try {
     const { productId } = req.params;
     const key = `cart:${req.sessionID}`;
 
-    // 1️⃣ GET cart (Upstash returns object)
-    const cart = await redisClient.get(key);
-    if (!cart) return res.redirect("/cart");
+    const cartRaw = await redisClient.get(key);
+    const cart = parseCart(cartRaw);
 
-    // 2️⃣ Find item safely
-    const itemIndex = cart.items.findIndex(
-      (i) => i.productId.toString() === productId
-    );
+    const item = cart.items.find(i => i.productId === productId);
+    if (!item) {
+      return res.json({ success: false });
+    }
 
-    if (itemIndex === -1) return res.redirect("/cart");
-
-    const item = cart.items[itemIndex];
-
-    // 3️⃣ Update totals
+    // Decrement
+    item.quantity -= 1;
     cart.totalQuantity -= 1;
     cart.totalPrice -= item.price;
 
-    // 4️⃣ Update item quantity or remove
-    if (item.quantity > 1) {
-      item.quantity -= 1;
-    } else {
-      cart.items.splice(itemIndex, 1);
+    // Remove if quantity hits 0
+    if (item.quantity <= 0) {
+      cart.items = cart.items.filter(i => i.productId !== productId);
     }
 
-    // 5️⃣ SAVE cart (NO JSON.stringify, lowercase ex)
-    await redisClient.set(key, cart, {
-      ex: 60 * 60 * 24, // 24 hours
-    });
+    // Safety clamps
+    cart.totalQuantity = Math.max(0, cart.totalQuantity);
+    cart.totalPrice = Math.max(0, cart.totalPrice);
 
-    res.redirect(req.get("Referer") || "/cart");
+    await redisClient.set(key, JSON.stringify(cart));
+
+    res.json({
+      success: true,
+      item: item.quantity > 0 ? item : { productId, quantity: 0 },
+      cart
+    });
   } catch (err) {
-    console.error("Cart decrement error:", err);
-    res.redirect("/cart");
+    console.error("cartDecrement error:", err);
+    res.status(500).json({ success: false });
   }
 };
 
+
 // Remove item entirely
-const cartRemove = async (req, res) => {
+export const cartRemove = async (req, res) => {
   try {
     const { productId } = req.params;
     const key = `cart:${req.sessionID}`;
 
-    // 1️⃣ Get cart
-    const cart = await redisClient.get(key);
-    if (!cart) return res.redirect("/cart");
+    const cartRaw = await redisClient.get(key);
+    const cart = parseCart(cartRaw);
 
-    // 2️⃣ Find item safely
-    const itemIndex = cart.items.findIndex(
-      (i) => i.productId.toString() === productId
-    );
+    const item = cart.items.find(i => i.productId === productId);
+    if (!item) {
+      return res.json({ success: false });
+    }
 
-    if (itemIndex === -1) return res.redirect("/cart");
-
-    const item = cart.items[itemIndex];
-
-    // 3️⃣ Update totals
     cart.totalQuantity -= item.quantity;
     cart.totalPrice -= item.price * item.quantity;
 
-    // 4️⃣ Remove item
-    cart.items.splice(itemIndex, 1);
+    cart.items = cart.items.filter(i => i.productId !== productId);
 
-    // 5️⃣ Save cart (Upstash style)
-    await redisClient.set(key, cart, {
-      ex: 60 * 60 * 24, // 24 hours
+    // Safety clamps
+    cart.totalQuantity = Math.max(0, cart.totalQuantity);
+    cart.totalPrice = Math.max(0, cart.totalPrice);
+
+    await redisClient.set(key, JSON.stringify(cart));
+
+    res.json({
+      success: true,
+      item: null,
+      cart
     });
-
-    res.redirect(req.get("Referer") || "/cart");
   } catch (err) {
-    console.error("Cart remove error:", err);
-    res.redirect("/cart");
+    console.error("cartRemove error:", err);
+    res.status(500).json({ success: false });
   }
 };
+
 
 //Clear the cart
 const clearCart = async (req, res) => {
@@ -271,9 +238,6 @@ export const incrementCartItemAjax = async (req, res) => {
     res.status(500).json({ success: false });
   }
 };
-
-
-
 
 export default {
   cartAdd,
