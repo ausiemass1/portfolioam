@@ -13,7 +13,17 @@ main {
   flex: 1 0 auto;
 }
 
-/* Keep footer at the bottom */
+/* Home page styles */
+.truncate {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+/* footer styles */
+
 footer.page-footer {
   margin-top: auto;
   width: 100%;
@@ -27,13 +37,6 @@ footer .container {
 }
 
 
-/* Home page styles */
-.truncate {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
 
 
 /* cart page styles */
