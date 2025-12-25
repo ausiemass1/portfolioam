@@ -1,5 +1,11 @@
-<!-- <form class="container" action="/auth/login" method="POST">
+<form class="container" action="/auth/login" method="POST">
     <h2>Login</h2>
+                    <!-- Flash Messages -->
+                    <% if (error && error.length > 0) { %>
+                        <div class="card-panel red lighten-2 white-text center-align">
+                            <%= error[0] %>
+                        </div>
+                    <% } %>
 
     <label>Email</label>
     <input type="email" name="email" required>
@@ -8,12 +14,13 @@
     <input type="password" name="password" required>
 
     <button type="submit">Login</button>
-    <a href="/auth/google">Login with Google</a>
+   
 </form>
-<a href="/auth/github">Login with github</a> -->
+<a href="/auth/google">Login with Google</a><br><br>
+<a href="/auth/github">Login with github</a>
 
 
-<div class="row" style="margin-top: 50px;">
+<!-- <div class="row" style="margin-top: 50px;">
 
     <div class="col s12 m6 offset-m3">
         <div class="card">
@@ -21,28 +28,22 @@
             <div class="card-content">
                 <h4 class="center-align">Login</h4>
 
-                <!-- Flash Messages -->
-                <% if (error && error.length > 0) { %>
-                    <div class="card-panel red lighten-2 white-text center-align">
-                        <%= error[0] %>
-                    </div>
-                <% } %>
-
+             
                 <form action="/auth/login" method="POST">
 
-                    <!-- Email -->
+             
                     <div class="input-field">
                         <input type="email" name="email" id="email" required>
                         <label for="email">Email</label>
                     </div>
 
-                    <!-- Password -->
+               
                     <div class="input-field">
                         <input type="password" name="password" id="password" required>
                         <label for="password">Password</label>
                     </div>
 
-                    <!-- Login Button -->
+                   
                     <button class="btn waves-effect waves-light blue full-width" type="submit" style="width: 100%;">
                         Login
                     </button>
@@ -51,12 +52,12 @@
 
                 <div class="divider" style="margin: 20px 0;"></div>
 
-                <!-- Google Login -->
+               
                 <a href="/auth/google" class="btn red lighten-1 full-width" style="width: 100%; margin-bottom: 10px;">
                     <i class="material-icons left">account_circle</i> Login with Google
                 </a>
 
-                <!-- GitHub Login -->
+              
                 <a href="/auth/github" class="btn black full-width" style="width: 100%;">
                     <i class="material-icons left">code</i> Login with GitHub
                 </a>
@@ -66,5 +67,5 @@
         </div>
     </div>
 
-</div>
+</div> -->
 
