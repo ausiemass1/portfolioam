@@ -26,12 +26,13 @@ passport.use(
 );
 
 /* GOOGLE STRATEGY */
+const WEB_URL = process.env.WEB_URL;
 passport.use(
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACK_URL,
+      callbackURL: `${WEB_URL}auth/google/callback`,
     },
     async (_, __, profile, done) => {
       try {
@@ -59,7 +60,7 @@ passport.use(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: process.env.GITHUB_CALLBACK_URL,
+      callbackURL: `${WEB_URL}/auth/github/callback`,
     },
     async (_, __, profile, done) => {
       try {
