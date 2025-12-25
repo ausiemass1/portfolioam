@@ -1,41 +1,14 @@
-name: CI / CD – Node App Deploy
+name: CD – Deploy to Elitehost
 
 on:
-  pull_request:
-    branches: [main]
-
   push:
     branches: [main]
 
 jobs:
-  ci:
-    name: Run CI checks
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run lint
-        run: npm run lint
-
-      - name: Run tests (if any)
-        run: npm test || echo "No tests found"
-
   deploy:
-    name: Deploy to Elitehost
-    needs: ci
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
+    environment: 
+        name: production
 
     steps:
       - name: Checkout code
