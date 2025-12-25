@@ -27,16 +27,17 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const isAuth = authMiddleware.isAuth
 
+if (process.env.NODE_ENV !== "production") {
+  console.warn("⚠️ App is not running in production mode");
+}
+
+
+// sessions
 app.use(
   session({
-    // store: new RedisStore({ client: redisClient }),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    // cookie: {
-    //   httpOnly: true,
-    //   maxAge: 1000 * 60 * 60 * 24, // 1 day
-    // },
   })
 );
 

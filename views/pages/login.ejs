@@ -1,4 +1,5 @@
-<form class="container" action="/auth/login" method="POST">
+ <div class="container">
+<form  action="/auth/login" method="POST">
     <h2>Login</h2>
                     <!-- Flash Messages -->
                     <% if (error && error.length > 0) { %>
@@ -15,57 +16,7 @@
 
     <button type="submit">Login</button>
    
-</form>
+</form><br><br>
 <a href="/auth/google">Login Google</a><br><br>
 <a href="/auth/github">Login github</a>
-
-
-<!-- <div class="row" style="margin-top: 50px;">
-
-    <div class="col s12 m6 offset-m3">
-        <div class="card">
-
-            <div class="card-content">
-                <h4 class="center-align">Login</h4>
-
-             
-                <form action="/auth/login" method="POST">
-
-             
-                    <div class="input-field">
-                        <input type="email" name="email" id="email" required>
-                        <label for="email">Email</label>
-                    </div>
-
-               
-                    <div class="input-field">
-                        <input type="password" name="password" id="password" required>
-                        <label for="password">Password</label>
-                    </div>
-
-                   
-                    <button class="btn waves-effect waves-light blue full-width" type="submit" style="width: 100%;">
-                        Login
-                    </button>
-
-                </form>
-
-                <div class="divider" style="margin: 20px 0;"></div>
-
-               
-                <a href="/auth/google" class="btn red lighten-1 full-width" style="width: 100%; margin-bottom: 10px;">
-                    <i class="material-icons left">account_circle</i> Login with Google
-                </a>
-
-              
-                <a href="/auth/github" class="btn black full-width" style="width: 100%;">
-                    <i class="material-icons left">code</i> Login with GitHub
-                </a>
-
-            </div>
-
-        </div>
-    </div>
-
-</div> -->
-
+</div>
