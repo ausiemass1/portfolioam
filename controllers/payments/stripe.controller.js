@@ -1,7 +1,7 @@
 import stripe from "../../config/stripe.js";
 import Order from"../../models/orderModel.js";
 import redisClient from "../../config/redis.js";
-
+import { urls } from "../../config/urls.js";
 
 // checkout route
 const stripeCheckout = (req, res) => {
@@ -72,8 +72,8 @@ const stripeCheckoutRedis = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: lineItems,
-      success_url: `${process.env.WEB_URL}/stripe/success`,
-      cancel_url: `${process.env.WEB_URL}/cart`,
+      success_url: urls.stripe.success,
+      cancel_url: urls.stripe.cancel,
       metadata: {
         sessionId: req.sessionID,
       },
