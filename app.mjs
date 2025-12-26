@@ -21,6 +21,7 @@ import connectDB from "./config/db.js";
 import redisClient from "./config/redis.js";
 import cartRoutes from "./routes/cart/cart.routes.js";
 import { fileURLToPath } from "url";
+import nodeRestartRoutes from "./routes/site/node.restart.routes.js"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -100,14 +101,7 @@ app.use(express.json());
 // ROUTES
 // --------------------
 //CI/CD route for restaing node
-app.post("/__restart", (req, res) => {
-  if (req.headers.authorization !== `Bearer ${process.env.RESTART_SECRET}`) {
-    return res.sendStatus(403);
-  }
-
-  res.send("Restarting");
-  process.exit(0);
-});
+app.use("/__restart", nodeRestartRoutes);
 //all other roues
 app.use("/users", userRoutes);
 app.use("/admin", isAuth, adminRoutes);
