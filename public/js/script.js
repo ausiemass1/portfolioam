@@ -79,5 +79,42 @@ document.addEventListener("click", async (e) => {
   }
 }
 
+// add to cart
+document.addEventListener("click", async (e) => {
+  if (!e.target.classList.contains("add-to-cart-btn")) return;
+
+  const button = e.target;
+  const productId = button.dataset.productId;
+
+  button.disabled = true;
+
+  try {
+    const res = await fetch(`/cart/add/${productId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      // Update cart count (badge)
+      const cartCount = document.querySelector(".cart-count");
+      if (cartCount) {
+        cartCount.textContent = data.totalQuantity;
+      }
+
+      //  feedback to the client
+      M.toast({ html: "Added to cart 🛒", classes: "green" });
+    }
+  } catch (err) {
+    console.error(err);
+    M.toast({ html: "Error adding to cart", classes: "red" });
+  } finally {
+    button.disabled = false;
+  }
+});
+
 
 

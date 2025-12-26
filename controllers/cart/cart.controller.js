@@ -4,7 +4,7 @@ import redisClient from "../../config/redis.js";
 const emptyCart = {
   items: [],
   totalQuantity: 0,
-  totalPrice: 0
+  totalPrice: 0,
 };
 
 const parseCart = (cartRaw) => {
@@ -12,22 +12,21 @@ const parseCart = (cartRaw) => {
   return typeof cartRaw === "string" ? JSON.parse(cartRaw) : cartRaw;
 };
 
-
-// Add product to cart
+// Add product to cart (AJAX-friendly)
 const cartAdd = async (req, res) => {
   try {
     const { productId } = req.params;
     const sessionId = req.sessionID;
 
     const product = await Product.findById(productId);
-    if (!product) return res.redirect("/products");
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
 
     const key = `cart:${sessionId}`;
 
-    // 1️⃣ GET cart from Upstash (returns object or null)
     let cart = await redisClient.get(key);
 
-    // 2️⃣ Initialise if missing
     if (!cart) {
       cart = {
         items: [],
@@ -36,7 +35,6 @@ const cartAdd = async (req, res) => {
       };
     }
 
-    // 3️⃣ Find existing item
     const item = cart.items.find((i) => i.productId.toString() === productId);
 
     if (item) {
@@ -51,36 +49,24 @@ const cartAdd = async (req, res) => {
       });
     }
 
-    // 4️⃣ Update totals
     cart.totalQuantity += 1;
     cart.totalPrice += product.price;
 
-    // 5️⃣ SAVE cart back to Redis (NO stringify)
     await redisClient.set(key, cart, {
-      ex: 60 * 60 * 24, // 24 hours
+      ex: 60 * 60 * 24,
     });
 
-    res.redirect(req.get("Referer") || "/products");
+    // ✅ JSON response (NO redirect)
+    res.json({
+      success: true,
+      totalQuantity: cart.totalQuantity,
+      totalPrice: cart.totalPrice,
+    });
   } catch (err) {
     console.error("Cart add error:", err);
-    res.redirect("/products");
+    res.status(500).json({ success: false });
   }
 };
-
-//view cart items
-// const cartDisplay = async (req, res) => {
-//   const key = `cart:${req.sessionID}`;
-//   const cartData = JSON.parse(await redisClient.get(key));
-//   const cart = cartData
-//   ? JSON.parse(cartData)
-//   : {
-//       items: [],
-//       totalQuantity: 0,
-//       totalPrice: 0
-//     };
-
-//   res.render("pages/cart", { cart });
-// };
 
 //view cart items
 const cartDisplay = async (req, res) => {
@@ -105,7 +91,7 @@ export const cartDecrement = async (req, res) => {
     const cartRaw = await redisClient.get(key);
     const cart = parseCart(cartRaw);
 
-    const item = cart.items.find(i => i.productId === productId);
+    const item = cart.items.find((i) => i.productId === productId);
     if (!item) {
       return res.json({ success: false });
     }
@@ -117,7 +103,7 @@ export const cartDecrement = async (req, res) => {
 
     // Remove if quantity hits 0
     if (item.quantity <= 0) {
-      cart.items = cart.items.filter(i => i.productId !== productId);
+      cart.items = cart.items.filter((i) => i.productId !== productId);
     }
 
     // Safety clamps
@@ -129,14 +115,13 @@ export const cartDecrement = async (req, res) => {
     res.json({
       success: true,
       item: item.quantity > 0 ? item : { productId, quantity: 0 },
-      cart
+      cart,
     });
   } catch (err) {
     console.error("cartDecrement error:", err);
     res.status(500).json({ success: false });
   }
 };
-
 
 // Remove item entirely
 export const cartRemove = async (req, res) => {
@@ -147,7 +132,7 @@ export const cartRemove = async (req, res) => {
     const cartRaw = await redisClient.get(key);
     const cart = parseCart(cartRaw);
 
-    const item = cart.items.find(i => i.productId === productId);
+    const item = cart.items.find((i) => i.productId === productId);
     if (!item) {
       return res.json({ success: false });
     }
@@ -155,7 +140,7 @@ export const cartRemove = async (req, res) => {
     cart.totalQuantity -= item.quantity;
     cart.totalPrice -= item.price * item.quantity;
 
-    cart.items = cart.items.filter(i => i.productId !== productId);
+    cart.items = cart.items.filter((i) => i.productId !== productId);
 
     // Safety clamps
     cart.totalQuantity = Math.max(0, cart.totalQuantity);
@@ -166,14 +151,13 @@ export const cartRemove = async (req, res) => {
     res.json({
       success: true,
       item: null,
-      cart
+      cart,
     });
   } catch (err) {
     console.error("cartRemove error:", err);
     res.status(500).json({ success: false });
   }
 };
-
 
 //Clear the cart
 const clearCart = async (req, res) => {
@@ -216,7 +200,7 @@ export const incrementCartItemAjax = async (req, res) => {
             totalPrice: 0,
           };
 
-    const item = cart.items.find(i => i.productId === productId);
+    const item = cart.items.find((i) => i.productId === productId);
 
     if (!item) {
       return res.status(404).json({ message: "Item not found" });

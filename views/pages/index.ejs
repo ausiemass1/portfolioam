@@ -1,65 +1,57 @@
-
 <h2>Welcome to the Home Page!</h2>
 <p>This content comes from the home view.</p>
 
 <div class="row">
-  <% products.forEach(product => { %>
-<div class="col s12 m6 l4">
-  <div class="card blue-grey darken-1 sticky-action">
+  <% products.forEach(product=> { %>
+    <div class="col s12 m6 l4">
+      <div class="card blue-grey darken-1 sticky-action">
 
-    <!-- Image -->
-    <div class="card-image waves-effect waves-block waves-light">
-      <img
-        class="activator"
-        src="<%= product.images[0] %>"
-        alt="<%= product.name %>"
-      >
+        <!-- Image -->
+        <div class="card-image waves-effect waves-block waves-light">
+          <img class="activator" src="<%= product.images[0] %>" alt="<%= product.name %>">
+        </div>
+
+        <!-- Card Content -->
+        <div class="card-content white-text">
+          <span class="card-title activator">
+            <%= product.name %>
+              <i class="material-icons right">more_vert</i>
+          </span>
+
+          <!-- Short description preview -->
+          <p class="truncate">
+            <%= product.description %>
+          </p>
+
+          <p class="right-align">
+            <strong>$<%= product.price.toFixed(2) %></strong>
+          </p>
+        </div>
+
+        <!-- Card Actions (ALWAYS visible) -->
+        <div class="card-action">
+          <a href="/products/<%= product._id %>">View Details</a>
+
+
+          <button class="btn-small teal waves-effect waves-light add-to-cart-btn" data-product-id="<%= product._id %>">
+            Add to Cart
+          </button>
+
+        </div>
+
+        <!-- Reveal (slides over card, not page) -->
+        <div class="card-reveal blue-grey darken-1 white-text">
+          <span class="card-title">
+            <%= product.name %>
+              <i class="material-icons right">close</i>
+          </span>
+
+          <p>
+            <%= product.description %>
+          </p>
+        </div>
+
+      </div>
     </div>
-
-    <!-- Card Content -->
-    <div class="card-content white-text">
-      <span class="card-title activator">
-        <%= product.name %>
-        <i class="material-icons right">more_vert</i>
-      </span>
-
-      <!-- Short description preview -->
-      <p class="truncate">
-        <%= product.description %>
-      </p>
-
-      <p class="right-align">
-        <strong>$<%= product.price.toFixed(2) %></strong>
-      </p>
-    </div>
-
-    <!-- Card Actions (ALWAYS visible) -->
-    <div class="card-action">
-      <a href="/products/<%= product._id %>">View Details</a>
-
-      <form
-        action="/cart/add/<%= product._id %>"
-        method="POST"
-        class="right"
-      >
-        <button class="btn-small teal waves-effect waves-light">
-          Add to Cart
-        </button>
-      </form>
-    </div>
-
-    <!-- Reveal (slides over card, not page) -->
-    <div class="card-reveal blue-grey darken-1 white-text">
-      <span class="card-title">
-        <%= product.name %>
-        <i class="material-icons right">close</i>
-      </span>
-
-      <p><%= product.description %></p>
-    </div>
-
-  </div>
+    <% }) %>
 </div>
-<% }) %>
-</div>
-
