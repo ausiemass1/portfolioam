@@ -13,33 +13,7 @@ main {
   flex: 1 0 auto;
 }
 
-/* Home page styles */
-.truncate {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-
-/* footer styles */
-
-footer.page-footer {
-  margin-top: auto;
-  width: 100%;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-/* Optional: fix Materialize container margin */
-footer .container {
-  margin-bottom: 0;
-}
-
-
-
-
-/* cart page styles */
+/*  -------------------- cart page styles ----------------- */
 .cart-container {
   max-width: 1000px;
   margin: 40px auto;
@@ -148,8 +122,8 @@ footer .container {
 
 .cart-count {
   position: absolute;
-  top: 2px;      /* pushes it up (superscript effect) */
-  right: 1px;    /* pushes it to the corner */
+  top: 2px; /* pushes it up (superscript effect) */
+  right: 1px; /* pushes it to the corner */
   background: red;
   color: white;
   font-size: 11px;
@@ -162,4 +136,66 @@ footer .container {
   justify-content: center;
 }
 
+/* ---------- RESPONSIVE PRODUCT CARDS (HOME PAGE) ---------- */
 
+/* Equal-height cards */
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Image container with responsive aspect ratio */
+.card-image {
+  aspect-ratio: 4 / 3; /* change to 1/1 or 16/9 if you want */
+  overflow: hidden;
+}
+
+/* Make image fill container responsively */
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Allow content to stretch evenly */
+.card-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* Limit description to keep cards balanced */
+.card-content .truncate {
+  -webkit-line-clamp: 2;
+}
+
+/* Push price to bottom */
+.card-content p.right-align {
+  margin-top: auto;
+}
+
+/* Keep actions aligned */
+.card-action {
+  margin-top: auto;
+}
+
+/* Reveal should also flex */
+.card-reveal {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ------------------------------------ FOOTER STYLES------------------ */
+
+footer.page-footer {
+  margin-top: auto;
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* Optional: fix Materialize container margin */
+footer .container {
+  margin-bottom: 0;
+}
