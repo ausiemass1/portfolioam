@@ -136,6 +136,46 @@ main {
   justify-content: center;
 }
 
+
+/* HERO BANNER */
+.hero-banner {
+  position: relative;
+  background-image: url("../images/banner.jpg"); /* change if needed */
+  background-size: cover;
+  background-position: center;
+  min-height: 55vh; /* responsive height */
+  display: flex;
+  align-items: center;
+}
+
+.hero-overlay {
+  background: rgb(0 0 0 / 55%);
+  width: 100%;
+  min-height: 55vh;
+  display: flex;
+  align-items: center;
+}
+
+.hero-content h3 {
+  font-weight: 600;
+}
+
+.hero-content p {
+  margin: 20px 0;
+}
+
+/* Mobile tweaks */
+@media (width <= 600px) {
+  .hero-banner {
+    min-height: 40vh;
+  }
+
+  .hero-content h3 {
+    font-size: 1.8rem;
+  }
+}
+
+
 /* ---------- RESPONSIVE PRODUCT CARDS (HOME PAGE) ---------- */
 
 /* Equal-height cards */

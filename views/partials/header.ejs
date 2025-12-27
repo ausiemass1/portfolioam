@@ -1,4 +1,12 @@
 <header>
+  <!-- dropdown  -->
+  <ul id="dropdown1" class="dropdown-content">
+    <li><a href="#!">My Orders</a></li>
+    <li><a href="#!">My Points</a></li>
+    <li class="divider"></li>
+    <li><a href="/users/logout">Logout</a></li>
+  </ul>
+
   <div class="navbar-fixed">
     <nav class="nav-logo">
       <div class="nav-wrapper blue darken-3 ">
@@ -7,35 +15,57 @@
         <ul class="right hide-on-med-and-down">
           <li><a href="/">Home</a></li>
           <li><a href="/contact">Contact Us</a></li>
-          <li><a href="/register">Register</a></li>
-          <li><a href="/login">Login</a></li>        
-          <li class="cart-icon">
-            <a href="/cart" id="cart-link">
-              <span class="material-icons">add_shopping_cart</span>
-            
-              <span
-                id="cart-count"
-                class="cart-count"
-                style="<%= cart?.totalQuantity > 0 ? '' : 'display:none' %>"
-              >
-                <%= cart?.totalQuantity || 0 %>
-              </span>
-            </a>
-            
-          </li>
-          <li><a href="/users/logout">logout</a></li>
+        
+          <% if (!user) { %>
+            <!-- NOT logged in -->
+            <li><a href="/register">Register</a></li>
+            <li><a href="/login">Login</a></li>
+          <% } %>
+        
+          <% if (user) { %>
+            <!-- Logged in -->
+            <li class="cart-icon">
+              <a href="/cart" id="cart-link">
+                <span class="material-icons">add_shopping_cart</span>
+        
+                <span
+                  id="cart-count"
+                  class="cart-count <%= cart?.totalQuantity > 0 ? '' : 'hide' %>"
+                >
+                  <%= cart?.totalQuantity || 0 %>
+                </span>
+              </a>
+            </li>
+        <li><a class="dropdown-trigger" href="#!" data-target="dropdown1"><span class="material-icons">
+          account_circle
+          </span></a></li>
+          
+          <% } %>
         </ul>
+        
       </div>
     </nav>
   </div>
-  
-    <ul class="sidenav" id="mobile-demo">
-      <li><a href="/">Home</a></li>
-          <li><a href="/about">About</a></li>
-          <li><a href="/login">Login</a></li>
-          <li><a href="/projects">Projects</a></li>
-          <li><a href="/logout">logout</a></li>
-          <li><a href="/register">Register</a></li>
-    </ul>
-            
+
+  <ul class="sidenav" id="mobile-demo">
+    <li><a href="/">Home</a></li>
+    <li><a href="/contact">Contact Us</a></li>
+    <li><a href="/register">Register</a></li>
+    <li><a href="/login">Login</a></li>
+    <li class="cart-icon">
+      <a href="/cart" id="cart-link">
+        <span class="material-icons">add_shopping_cart</span>
+
+        <span
+              id="cart-count"
+              class="cart-count <%= cart?.totalQuantity > 0 ? '' : 'hide' %>"
+            >
+              <%= cart?.totalQuantity || 0 %>
+            </span>
+      </a>
+
+    </li>
+    <li><a href="/users/logout">logout</a></li>
+  </ul>
+
 </header>

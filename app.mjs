@@ -42,6 +42,9 @@ app.use(
   })
 );
 
+app.use(passport.initialize()); // initialise the process of login in
+app.use(passport.session()); // use session
+
 app.use(flash());
 
 // Make flash messages available in all EJS files
@@ -84,6 +87,11 @@ app.use(async (req, res, next) => {
   res.locals.cart = cart;
   next();
 });
+app.use((req, res, next) => {
+  res.locals.user = req.user || null;
+  next();
+});
+
 
 
 // Serve static files (CSS, JS, images) from /public
@@ -91,8 +99,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Serve uploaded images
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use(passport.initialize()); // initialise the process of login in
-app.use(passport.session()); // use session
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

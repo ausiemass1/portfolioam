@@ -3,19 +3,19 @@ const loginSuccess = (req, res) => {
   res.redirect("/admin/dashboard");
 };
 
-// Logout logic
-const logout = (req, res) => {
-  req.logout((err) => {
-    if (err) {
-      console.log("Logout error:", err);
-      return res.redirect("/products"); // or error page
-    }
+
+// Logout logic (Passport v0.6+)
+export const logout = (req, res, next) => {
+  req.logout(function (err) {
+    if (err) return next(err);
 
     req.session.destroy(() => {
-      return res.redirect("/login");
+      res.clearCookie("connect.sid"); // IMPORTANT
+      res.redirect("/login");
     });
   });
 };
+
 
 export default {
   loginSuccess,

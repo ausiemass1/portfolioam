@@ -99,15 +99,16 @@ document.addEventListener("click", async (e) => {
     const data = await res.json();
 
     if (data.success) {
-      // Update cart count (badge)
-      const cartCount = document.querySelector(".cart-count");
+      const cartCount = document.querySelector("#cart-count");
+    
       if (cartCount) {
         cartCount.textContent = data.totalQuantity;
+        cartCount.classList.remove("hide");
       }
-
-      //  feedback to the client
+    
       M.toast({ html: "Added to cart 🛒", classes: "green" });
     }
+    
   } catch (err) {
     console.error(err);
     M.toast({ html: "Error adding to cart", classes: "red" });
