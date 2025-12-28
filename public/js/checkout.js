@@ -1,9 +1,9 @@
-/* global Stripe, axios */
+// /* global Stripe, axios */
 
 // 1. Initialize Stripe using your publishable key
-const stripe = Stripe(
-  "pk_test_51ScC5bDnJPMwVKZWDxXorPMWcikNffP8CN2NyDlBtfGdow60xWxkOow5Mv3i8nNDvkDJyYXorTgSEDefmgQbFXEb005SoTci04"
-);
+// const stripe = Stripe(
+//   "pk_test_51ScC5bDnJPMwVKZWDxXorPMWcikNffP8CN2NyDlBtfGdow60xWxkOow5Mv3i8nNDvkDJyYXorTgSEDefmgQbFXEb005SoTci04"
+// );
 
 // 2. Create elements instance
 // const elements = stripe.elements();
